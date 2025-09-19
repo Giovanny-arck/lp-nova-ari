@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     
     // --- URLs DOS WEBHOOKS (SUBSTITUA PELOS SEUS) ---
-    const WEBHOOK_URL_1 = 'https://coloque.seu.webhook/aqui-1';
-    const WEBHOOK_URL_2 = 'https://coloque.seu.webhook/aqui-2';
+    const WEBHOOK_URL_1 = 'https://n8nwebhook.arck1pro.shop/webhook/lp-lead-direto';
+    const WEBHOOK_URL_2 = 'https://n8nwebhook.arck1pro.shop/webhook/lp-lead-direto-rdmkt';
 
     // --- FORMULÁRIO DA HERO SECTION (UTMs e Webhook) ---
     const contactForm = document.getElementById('contact-form');
@@ -19,6 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         return utm;
+    }
+
+    // --- GERA UM ID ÚNICO PARA O EVENTO ---
+    function generateEventId() {
+        return 'evt_' + Date.now() + '_' + Math.floor(Math.random() * 1000000);
     }
 
     async function handleFormSubmit(event) {
@@ -58,6 +63,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 formStatus.textContent = 'Dados enviados com sucesso!';
                 formStatus.className = 'success';
                 contactForm.reset();
+
+                // --- DISPARO DO PIXEL DA META ---
+                if (typeof fbq === 'function') {
+                    // Evento Lead
+                    fbq('track', 'Lead', {
+                        name: data.nome || '',
+                        email: data.email || '',
+                        phone: data.whatsapp || '',
+                        utm_source: payload.utms.utm_source || ''
+                    });
+                    console.log("Evento Meta Pixel 'Lead' disparado");
+
+                    // Evento CompleteRegistration com eventID
+                    const eventId = generateEventId();
+                    fbq('track', 'CompleteRegistration', {}, { eventID: eventId });
+                    console.log("Evento Meta Pixel 'CompleteRegistration' disparado com eventID:", eventId);
+                }
             } else {
                 throw new Error('Falha no envio para ambos os webhooks.');
             }
@@ -70,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
             submitButton.textContent = 'QUERO SABER MAIS';
         }
     }
+});
 
 
     // --- LÓGICA DA CALCULADORA SIMPLIFICADA ---
@@ -187,4 +210,3 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
-});
