@@ -38,8 +38,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const formData = new FormData(contactForm);
         const data = Object.fromEntries(formData.entries());
         
+        // --- FORMATAÇÃO DO TELEFONE ---
+        // Pega o número de telefone do formulário
+        let formattedPhone = data.whatsapp || '';
+        // 1. Remove tudo que não for dígito (como "(", ")", "-", " ")
+        formattedPhone = formattedPhone.replace(/\D/g, '');
+        // 2. Remove o "55" do início, se o usuário já tiver digitado, para evitar duplicidade
+        if (formattedPhone.startsWith('55')) {
+            formattedPhone = formattedPhone.substring(2);
+        }
+        // 3. Adiciona o prefixo +55 ao número limpo
+        formattedPhone = '+55' + formattedPhone;
+        // --- FIM DA FORMATAÇÃO ---
+
         const payload = {
             ...data,
+            whatsapp: formattedPhone, // Substitui o whatsapp original pelo formatado
             utms: getUtmParams(),
             submittedAt: new Date().toISOString()
         };
@@ -89,10 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
             formStatus.className = 'error';
         } finally {
             submitButton.disabled = false;
-            submitButton.textContent = 'QUERO SABER MAIS';
+            submitButton.textContent = 'QUERO ME REGISTRAR';
         }
     }
-});
 
 
     // --- LÓGICA DA CALCULADORA SIMPLIFICADA ---
