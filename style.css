@@ -1,0 +1,162 @@
+:root {
+    --primary-color: #28D8A3;
+    --dark-green: #071F3A;
+    --text-color: #333;
+    --background-color: #FFFFFF;
+    --light-gray-bg: #F8F9FA;
+    --border-color: #071F3A;
+    --error-color: #D32F2F;
+    --success-color: #071F3A;
+    --font-family: 'Poppins', system-ui, sans-serif;
+}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+/* Adicionado para rolagem suave */
+html {
+    scroll-behavior: smooth;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-family); color: var(--text-color); background-color: var(--background-color); line-height: 1.6; }
+.container { width: 90%; max-width: 1300px; margin: 0 auto; }
+h1, h2, h3 { color: var(--dark-green); font-weight: 700; line-height: 1.2; }
+img { max-width: 100%; height: auto; display: block; }
+
+.btn { display: inline-block; padding: 12px 24px; border-radius: 50px; border: none; font-weight: 600; cursor: pointer; text-align: center; text-decoration: none; transition: background-color 0.3s, color 0.3s; }
+.btn-primary { background-color: var(--primary-color); color: var(--dark-green); font-weight: 700; }
+.btn-primary:hover { background-color: #21b88a; }
+.btn-secondary { background-color:#28D8A3; color: var(--dark-green); border: 1px solid var(--dark-green); font-weight: 700; }
+.btn-secondary:hover { background-color:#21b88a; }
+
+.main-header { padding: 1rem 0; position: absolute; width: 100%; z-index: 10; }
+.main-header .logo { width: 350px; margin-left: -70px; }
+
+/* Hero Section */
+.hero-section { background-color: #333; color: white; padding: 120px 0 60px; background-size: cover; background-position: center; position: relative; min-height: 100vh; display: flex; align-items: center; }
+.hero-section::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5); }
+.hero-container { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 2rem; width: 100%; }
+.hero-content { text-align: center; }
+.hero-content h1 { color: white; font-size: 2.5rem; margin-bottom: 2rem; }
+.hero-content p { font-size: 1.1rem; max-width: 500px; margin-left: auto; margin-right: auto; margin-bottom: 2rem; }
+.scroll-down-link { margin-top: 2rem; display: inline-block; }
+.hero-form-wrapper { background-color: #fff; color: var(--text-color); border-radius: 8px; padding: 2.5rem; max-width: 550px; width: 100%; margin: 2rem auto 0; }
+
+/* Formulário da Hero Atualizado */
+.contact-form p { font-weight: 600; margin-bottom: 1rem; text-align: center; }
+.contact-form input, .contact-form select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 4px; margin-bottom: 1rem; font-family: var(--font-family); font-size: 1rem; color: #333; }
+.contact-form select { appearance: none; background: url("data:image/svg+xml,%3Csvg%20width%3D'12'%20height%3D'8'%20viewBox%3D'0%200%2012%208'%20fill%3D'none'%20xmlns%3D'http%3A//www.w3.org/2000/svg'%3E%3Cpath%20d%3D'M1.41%200.589966L6%205.16997L10.59%200.589966L12%201.99997L6%207.99997L0%201.99997L1.41%200.589966Z'%20fill%3D'%23333'%2F%3E%3C/svg%3E") no-repeat right 12px center; }
+.contact-form select:invalid { color: #666; }
+.contact-form small { display: block; font-size: 0.75rem; margin-bottom: 1.5rem; color: #666; text-align: center; }
+.contact-form .btn { width: 100%; }
+#form-status { margin-top: 1rem; text-align: center; font-weight: 600; font-size: 0.9rem; }
+#form-status.success { color: var(--success-color); }
+#form-status.error { color: var(--error-color); }
+
+/* About Section */
+.about-section { padding: 60px 0; text-align: center; }
+.about-container { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
+.about-container .logo { width: 200px; margin-bottom: 1rem; }
+.about-content h2 { font-size: 2.2rem; margin-bottom: 1rem; }
+.about-content p { max-width: 700px; margin: 0 auto 2rem; }
+
+/* Why Invest Section */
+.why-invest-section { padding: 60px 0; background-color: var(--light-gray-bg); }
+.why-invest-container { display: flex; flex-direction: column; gap: 2rem; }
+.history-card, .accordion-card { padding: 2rem; border-radius: 12px; }
+.history-card { background-color: #fff; background-size: cover; background-position: center; color: var(--dark-green); font-weight: 600; }
+.history-card p { margin-top: 1rem; }
+.accordion-card { background-color: var(--dark-green); color: white; }
+.accordion-card h3 { color: white; margin-bottom: 0.5rem; }
+.accordion-card .cta-button { margin-top: 1.5rem; }
+
+/* Accordion */
+.accordion-item { border-bottom: 1px solid rgba(255,255,255,0.2); }
+.accordion-item:last-child { border-bottom: none; }
+.accordion-header { width: 100%; background: none; border: none; color: white; text-align: left; padding: 1rem 0; font-size: 1.1rem; font-weight: 600; cursor: pointer; position: relative; padding-left: 2rem; margin: 1rem; }
+.accordion-header::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; border: 2px solid white; border-radius: 50%; transition: background-color 0.3s; }
+.accordion-item.active .accordion-header::before { background-color: white; }
+.accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, padding 0.3s ease-out; padding-left: 2rem; }
+.accordion-item.active .accordion-content { max-height: 200px; padding-bottom: 1rem; }
+.accordion-content p { color: white; }
+
+/* Profitability Banner */
+.profitability-banner-section { padding: 60px 0; background-color:#071F3A; background-size: cover; background-position: right center; }
+.banner-container { display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; }
+.banner-container h3 { font-size: 1.8rem; max-width: 400px; color: white; }
+
+/* Simulator Section */
+.simulator-section { padding: 60px 0; }
+.simulator-container { display: flex; flex-direction: column; gap: 3rem; }
+.simulator-intro { max-width: 500px; }
+.simulator-intro h2 { font-size: 2.2rem; margin-bottom: 1rem; }
+.simulator-intro small { display: block; margin-top: 1rem; color: #666; }
+.calculator-wrapper { border: 1px solid var(--primary-color); border-radius: 8px; padding: 2rem; }
+.form-inputs { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 1.5rem; }
+.input-group { flex: 1; }
+.input-group.full-width { flex-basis: 100%; }
+.input-group label { font-weight: 600; display: block; margin-bottom: 0.5rem; }
+.input-with-prefix { display: flex; border: 1px solid var(--border-color); border-radius: 4px; }
+.input-with-prefix span { padding: 10px; background-color: var(--light-gray-bg); }
+.input-with-prefix input { border: none; padding: 10px; width: 100%; font-size: 1rem; }
+
+/* Botões de Modalidade e Tempo */
+.forma-options-group, .tempo-options-group { display: flex; border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden; }
+.forma-btn, .tempo-btn { flex: 1; background-color: #fff; border: none; padding: 10px; cursor: pointer; font-weight: 600; transition: background-color 0.3s, color 0.3s; font-size: 0.9rem; }
+.forma-btn + .forma-btn, .tempo-btn + .tempo-btn { border-left: 1px solid var(--border-color); }
+.forma-btn.selected, .tempo-btn.selected { background-color: #071F3A; color: white; }
+
+.error-message { color: var(--error-color); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+.results-main { background-color: #071F3A; color: white; padding: 1.5rem; margin: 1rem 0 0 0; text-align: center; border-radius: 8px; }
+.results-main p { font-size: 1.1rem; }
+.results-main strong { font-size: 2.5rem; }
+.simulator-cta { text-align: center; margin-top: 2.5rem; }
+
+/* FAQ Section */
+.faq-section { padding: 60px 0; background: var(--light-gray-bg); }
+.faq-container { max-width: 800px; text-align: center; }
+.faq-container h2 { margin-bottom: 2rem; font-size: 2.2rem; }
+.faq-accordion .accordion-item { background-color: #071F3A; margin-bottom: 1rem; border-radius: 8px; border: 1px solid #071F3A; text-align: left; }
+.faq-accordion .accordion-header { color: white; font-weight: 600; }
+.faq-container .btn { margin-top: 2rem; }
+
+/* Footer */
+.main-footer { background-color: var(--dark-green); color: white; padding: 2rem 0; text-align: center; }
+
+/* Media Queries */
+@media (min-width: 768px) {
+    .hero-container { align-items: center; flex-direction: row; justify-content: space-between; text-align: left; }
+    .hero-content { text-align: left; }
+    .hero-content p { margin-left: 0; margin-right: 0; }
+    .hero-form-wrapper { margin: 0 0 0 2rem; }
+    .form-inputs { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
+    .about-container { flex-direction: row; text-align: left; gap: 3rem; }
+    .about-container .logo { flex-shrink: 0; }
+    .why-invest-container { flex-direction: row; align-items: stretch; }
+    .history-card, .accordion-card { width: 50%; }
+    .banner-container { flex-direction: row; justify-content: space-between; align-items: center; }
+     .hero-form-wrapper { 
+        max-width: 400px; /* Adicione esta linha para aumentar a largura */
+    }
+}
+
+@media (min-width: 1024px) {
+    .simulator-container { flex-direction: row; align-items: flex-start; gap: 4rem; }
+    .simulator-intro { flex: 1; }
+    .calculator-wrapper { width: 50%; max-width: 500px; flex-shrink: 0; }
+     .hero-form-wrapper { 
+        max-width: 400px; /* Adicione esta linha para aumentar a largura */
+    }
+}
+
+
+/* Adicionado para ajustar a logo no mobile */
+@media (max-width: 767px) {
+  .main-header .logo {
+    width: 250px; /* Tamanho reduzido para o mobile */
+    margin-left: auto; /* Centraliza a logo */
+    margin-right: auto; /* Centraliza a logo */
+  }
+   .hero-form-wrapper { 
+        max-width: 400px; /* Adicione esta linha para aumentar a largura */
+    }
+}
