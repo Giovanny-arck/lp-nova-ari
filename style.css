@@ -18,7 +18,7 @@ html {
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: var(--font-family); color: var(--text-color); background-color: var(--background-color); line-height: 1.6; }
-.container { width: 90%; max-width: 1200px; margin: 0 auto; }
+.container { width: 90%; max-width: 1650px; margin: 0 auto; }
 h1, h2, h3 { color: var(--dark-green); font-weight: 700; line-height: 1.2; }
 img { max-width: 100%; height: auto; display: block; }
 
@@ -29,7 +29,7 @@ img { max-width: 100%; height: auto; display: block; }
 .btn-secondary:hover { background-color:#21b88a; }
 
 .main-header { padding: 1rem 0; position: absolute; width: 100%; z-index: 10; }
-.main-header .logo { width: 350px; margin-left: -330px; }
+.main-header .logo { width: 350px;}
 
 /* Hero Section */
 .hero-section { background-color: #333; color: white; padding: 120px 0 60px; background-size: cover; background-position: center; position: relative; min-height: 100vh; display: flex; align-items: center; }
@@ -131,11 +131,12 @@ img { max-width: 100%; height: auto; display: block; }
     .hero-content p { margin-left: 0; margin-right: 0; }
     .hero-form-wrapper { margin: 0 0 0 2rem;}
     .form-inputs { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
-    .about-container { flex-direction: row; text-align: left; gap: 3rem; }
+    .about-container { flex-direction: row; justify-content: space-around; text-align: left; }
     .about-container .logo { flex-shrink: 0; }
     .why-invest-container { flex-direction: row; align-items: stretch; }
     .history-card, .accordion-card { width: 50%; }
-    .banner-container { flex-direction: row; justify-content: space-between; align-items: center; }
+    .banner-container { flex-direction: row; justify-content:space-around; align-items: center }
+    .simulator-container { flex-direction: row; justify-content: space-around; align-items: center; }
     }
 
 @media (min-width: 1024px) {
@@ -157,4 +158,27 @@ img { max-width: 100%; height: auto; display: block; }
     .accordion-card p { text-align: justify; }
     .accordion-header { margin: 0.10rem 0;}
   
+}
+/* --- Media Queries para Telas Maiores --- */
+
+/* Tablet e telas maiores (a partir de 768px) */
+@media (min-width: 768px) {
+    .main-header .logo { width: 350px; margin-left: -90px; padding: 0 40px; }
+    /* Estilos para tablets em modo retrato e acima */
+    /* Ex: mudar layout para colunas, aumentar fontes, etc. */
+
+}
+
+/* Laptop e telas maiores (a partir de 1024px) */
+@media (min-width: 1024px) {
+    .main-header .logo { width: 350px; margin-left: -90px; padding: 0 40px; }
+    /* Estilos para notebooks e desktops */
+    /* Ex: ajustar espaçamentos, refinar layout de colunas, etc. */
+
+}
+
+/* Laptop L e telas muito grandes (a partir de 1440px) */
+@media (min-width: 1440px) {
+    .main-header .logo { width: 350px; margin-left: -100px; }
+
 }
