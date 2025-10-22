@@ -108,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+<<<<<<< HEAD
     // --- LÓGICA DA CALCULADORA ATUALIZADA ---
     const valorInput = document.getElementById('valor-aplicado');
     const tempoBtns = document.querySelectorAll('.tempo-btn');
@@ -118,6 +119,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const valleResultDisplay = document.getElementById('valle-result');
     const totalFinalResultDisplay = document.getElementById('result-value-total-final'); // NOVO SELETOR
 
+=======
+    // --- LÓGICA DA CALCULADORA SIMPLIFICADA ---
+    const valorInput = document.getElementById('valor-aplicado');
+    const formaBtns = document.querySelectorAll('.forma-btn');
+    const tempoBtns = document.querySelectorAll('.tempo-btn');
+    const valorError = document.getElementById('valor-error');
+    const valleResultLabel = document.getElementById('valle-result-label');
+    const valleResultDisplay = document.getElementById('valle-result');
+
+    let formaSelecionada = 'final';
+>>>>>>> 62640be4edccb2669ea411f876a843c07db0bf50
     let mesesSelecionados = 0;
 
     const taxaPrazo = {
@@ -156,6 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+<<<<<<< HEAD
         const taxaExtraValor = obterTaxaExtraPorValor(valor);
 
         // 1. Calcular Rendimento Mensal
@@ -175,12 +188,33 @@ document.addEventListener('DOMContentLoaded', () => {
         mensalResultDisplay.textContent = formatarMoeda(resultadoMensal);
         valleResultDisplay.textContent = formatarMoeda(resultadoFinalJuros);
         totalFinalResultDisplay.textContent = formatarMoeda(resultadoTotalFinal); // ATUALIZA NOVO DISPLAY
+=======
+        let resultadoValle;
+        const taxaExtraValor = obterTaxaExtraPorValor(valor);
+
+        if (formaSelecionada === 'final') {
+            valleResultLabel.textContent = 'Valorização Total no Final do Período:';
+            const taxaBase = taxaPrazo[mesesSelecionados].final;
+            const taxaTotalMensalValle = taxaBase + taxaAdicionalFinal + taxaExtraValor;
+            resultadoValle = (valor * taxaTotalMensalValle) * mesesSelecionados;
+        } else { // mensal
+            valleResultLabel.textContent = 'Rendimento Mensal Estimado:';
+            const taxaBase = taxaPrazo[mesesSelecionados].mensal;
+            const taxaTotalMensalValle = taxaBase + taxaExtraValor;
+            resultadoValle = valor * taxaTotalMensalValle;
+        }
+        
+        valleResultDisplay.textContent = formatarMoeda(resultadoValle);
+>>>>>>> 62640be4edccb2669ea411f876a843c07db0bf50
     }
     
     function resetarResultados() {
         valleResultDisplay.textContent = 'R$ 0,00';
+<<<<<<< HEAD
         mensalResultDisplay.textContent = 'R$ 0,00';
         totalFinalResultDisplay.textContent = 'R$ 0,00'; // RESETA NOVO DISPLAY
+=======
+>>>>>>> 62640be4edccb2669ea411f876a843c07db0bf50
     }
     
     valorInput.addEventListener('input', (e) => {
@@ -189,6 +223,18 @@ document.addEventListener('DOMContentLoaded', () => {
         calcularSimulacao();
     });
 
+<<<<<<< HEAD
+=======
+    formaBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            formaBtns.forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            formaSelecionada = btn.dataset.forma;
+            calcularSimulacao();
+        });
+    });
+
+>>>>>>> 62640be4edccb2669ea411f876a843c07db0bf50
     tempoBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             tempoBtns.forEach(b => b.classList.remove('selected'));
@@ -220,4 +266,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> 62640be4edccb2669ea411f876a843c07db0bf50
