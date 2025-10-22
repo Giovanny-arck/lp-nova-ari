@@ -1,0 +1,604 @@
+:root {
+    --primary-color: #25d366;
+    --dark-green: #071F3A;
+    --text-color: #333;
+    --background-color: #FFFFFF;
+    --light-gray-bg: #F8F9FA;
+    --border-color: #071F3A;
+    --error-color: #D32F2F;
+    --success-color: #071F3A;
+    --font-family: 'Poppins', system-ui, sans-serif;
+}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+/* Adicionado para rolagem suave */
+html {
+    scroll-behavior: smooth;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-family); color: var(--text-color); background-color: var(--background-color); line-height: 1.6; }
+.container { width: 90%; max-width: 1650px; margin: 0 auto; }
+h1, h2, h3 { color: var(--dark-green); font-weight: 700; line-height: 1.2; }
+img { max-width: 100%; height: auto; display: block; }
+
+.btn { display: inline-block; padding: 12px 24px; border-radius: 50px; border: none; font-weight: 600; cursor: pointer; text-align: center; text-decoration: none; transition: background-color 0.3s, color 0.3s; }
+.btn-primary { background-color: var(--primary-color); color: var(--background-color); font-weight: 700; }
+.btn-primary:hover { background-color: #25d366; }
+.btn-secondary { background-color:#25d366; color: var(--dark-green); border: 1px solid var(--dark-green); font-weight: 700; }
+.btn-secondary:hover { background-color:#25d366; }
+
+.main-header { padding: 1rem 0; position: absolute; width: 100%; z-index: 10; }
+.main-header .logo { width: 350px;}
+
+/* Hero Section */
+.hero-section { background-color: #333; color: white; padding: 120px 0 60px; background-size: cover; background-position: center; position: relative; min-height: 100vh; display: flex; align-items: center; }
+/* Adicionado para alinhar o conteúdo da hero à esquerda */
+.hero-section .hero-container { width: 100%; max-width: 100%; padding-left: 5%; /* Espaçamento da borda esquerda */padding-right: 5%; /* Espaçamento da borda direita */}
+.hero-section::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5); }
+.hero-container { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 2rem; width: 100%; }
+.hero-content { text-align: center; }
+.hero-content h1 { color: white; font-size: 2.5rem; margin-bottom: 2rem; text-align: left; }
+.hero-content p { font-size: 1.1rem; max-width: 500px; margin-left: auto; margin-right: auto; margin-bottom: 2rem; }
+.scroll-down-link { margin-top: 2rem; display: inline-block; }
+.hero-form-wrapper { background-color: #fff; color: var(--text-color); border-radius: 8px; padding: 2.5rem; max-width: 550px; width: 100%; margin: 2rem auto 0; }
+
+/* Formulário da Hero Atualizado */
+.contact-form p { font-weight: 600; margin-bottom: 1rem; text-align: center; }
+.contact-form input, .contact-form select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 4px; margin-bottom: 1rem; font-family: var(--font-family); font-size: 1rem; color: #333; }
+.contact-form select { appearance: none; background: url("data:image/svg+xml,%3Csvg%20width%3D'12'%20height%3D'8'%20viewBox%3D'0%200%2012%208'%20fill%3D'none'%20xmlns%3D'http%3A//www.w3.org/2000/svg'%3E%3Cpath%20d%3D'M1.41%200.589966L6%205.16997L10.59%200.589966L12%201.99997L6%207.99997L0%201.99997L1.41%200.589966Z'%20fill%3D'%23333'%2F%3E%3C/svg%3E") no-repeat right 12px center; }
+.contact-form select:invalid { color: #666; }
+.contact-form small { display: block; font-size: 0.75rem; margin-bottom: 1.5rem; color: #666; text-align: center; }
+.contact-form .btn { width: 100%; }
+#form-status { margin-top: 1rem; text-align: center; font-weight: 600; font-size: 0.9rem; }
+#form-status.success { color: var(--success-color); }
+#form-status.error { color: var(--error-color); }
+
+/* --- NOVOS ESTILOS - SEÇÃO "QUEM ORGANIZA" --- */
+.about-section { 
+    padding: 60px 0; 
+    text-align: left; /* Alterado de 'center' */
+    background-color: var(--light-gray-bg); /* Fundo claro da imagem */
+}
+.about-title-main {
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 3rem;
+}
+.about-main-content {
+    display: flex;
+    flex-direction: column; /* Mobile-first: empilhado */
+    align-items: center;
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.about-image {
+    flex-shrink: 0;
+    width: 250px;
+    height: 250px;
+}
+.about-image img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid var(--background-color);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.about-text {
+    flex: 1;
+    text-align: left;
+}
+.about-text h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--dark-green);
+    margin-bottom: 1rem;
+}
+.about-text p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-color);
+}
+.about-details-grid {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr; /* Mobile-first: 1 coluna */
+    gap: 1.5rem;
+    max-width: 1100px;
+    margin: 3rem auto 0 auto;
+}
+.about-details-grid li {
+    position: relative;
+    padding-left: 35px; /* Espaço para o checkmark */
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+.about-details-grid li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 4px; /* Ajuste fino vertical */
+    width: 22px;
+    height: 22px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2328D8A3' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'%3E%3C/path%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.about-details-grid li small {
+    display: block;
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 0.25rem;
+}
+/* --- FIM DOS NOVOS ESTILOS --- */
+
+/* --- SEÇÃO ECOSSISTEMA EMPRESARIAL (AJUSTADA) --- */
+.ecosystem-section {
+    padding: 60px 0;
+    background-color: var(--light-gray-bg); 
+    text-align: center;
+}
+.ecosystem-title {
+    font-size: 2.2rem;
+    margin-bottom: 3rem;
+    color: var(--dark-green);
+}
+.ecosystem-title .arck1pro-text {
+    color: var(--primary-color); 
+}
+.ecosystem-grid {
+    display: grid;
+    grid-template-columns: 1fr; 
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto 3rem auto; 
+}
+.ecosystem-card {
+    background-color: var(--background-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+}
+.ecosystem-card h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--dark-green);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--primary-color); 
+    padding-bottom: 0.5rem;
+    min-height: 3.5rem; /* Garante altura mínima para alinhamento */
+}
+.ecosystem-card ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 1rem;
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around; 
+    min-height: 150px; 
+}
+.ecosystem-card li {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+.ecosystem-card li:last-child {
+    margin-bottom: 0;
+}
+
+.ecosystem-metrics {
+    display: flex;
+    flex-direction: column; 
+    gap: 1.5rem;
+    margin-top: 3rem;
+    max-width: 900px; 
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: space-around; 
+}
+.metric-item {
+    text-align: center;
+}
+.metric-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--dark-green);
+    line-height: 1;
+}
+.metric-description {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    margin-top: 0.25rem;
+}
+.ecosystem-arck1pro-logo {
+    margin: 3rem auto 0 auto; 
+    width: 200px; 
+}
+/* --- FIM DA NOVA SEÇÃO --- */
+
+
+/* Why Invest Section */
+.why-invest-section { padding: 60px 0; background-color: var(--light-gray-bg); }
+.why-invest-container { display: flex; flex-direction: column; gap: 2rem; }
+.history-card, .accordion-card { padding: 2rem; border-radius: 12px; }
+.history-card { background-color: #fff; background-size: cover; background-position: center; color: var(--dark-green); font-weight: 600; }
+.history-card p { margin-top: 1rem; }
+.accordion-card { background-color: var(--dark-green); color: white; }
+.accordion-card h3 { color: white; margin-bottom: 0.5rem; }
+.accordion-card .cta-button { margin-top: 1.5rem; }
+
+/* Accordion */
+.accordion-item { border-bottom: 1px solid rgba(255,255,255,0.2); }
+.accordion-item:last-child { border-bottom: none; }
+.accordion-header { width: 100%; background: none; border: none; color: white; text-align: left; padding: 1rem 0; font-size: 1.1rem; font-weight: 600; cursor: pointer; position: relative; padding-left: 2rem; margin: 1rem; }
+.accordion-header::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; border: 2px solid white; border-radius: 50%; transition: background-color 0.3s; }
+.accordion-item.active .accordion-header::before { background-color: white; }
+.accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, padding 0.3s ease-out; padding-left: 2rem; }
+.accordion-item.active .accordion-content { max-height: 200px; padding-bottom: 1rem; }
+.accordion-content p { color: white; }
+
+/* --- SEÇÃO DE BENEFÍCIOS ATUALIZADA --- */
+.benefits-section {
+    padding: 60px 0;
+    background-color: var(--background-color);
+}
+.benefits-container {
+    max-width: 1000px;
+    text-align: center; /* Centraliza o H2, a lista (como bloco) e o botão */
+}
+.benefits-section h2 {
+    font-size: 2.2rem;
+    margin-bottom: 2.5rem;
+}
+.benefits-list {
+    list-style: none;
+    padding: 0;
+    margin: 0; 
+    text-align: left; /* Alinha o TEXTO dos LIs à esquerda */
+    display: inline-block; /* Faz o <ul> se ajustar ao conteúdo */
+    /* O text-align: center do pai (.benefits-container) vai centralizar este bloco */
+}
+.benefits-list li {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-color);
+    position: relative;
+    padding-left: 40px; /* Espaço para o ícone */
+    margin-bottom: 1.25rem;
+}
+.benefits-list li:last-child {
+    margin-bottom: 0; /* Remove a margem do último item */
+}
+.benefits-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    /* SVG do checkmark verde (cor --primary-color) */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2328D8A3' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'%3E%3C/path%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Estilo para o botão na seção de benefícios */
+.benefits-cta {
+    margin-top: 2.5rem; /* Espaçamento acima do botão */
+}
+/* --- FIM DA SEÇÃO DE BENEFÍCIOS --- */
+
+/* Profitability Banner */
+.profitability-banner-section { padding: 60px 0; background-color:#071F3A; background-size: cover; background-position: right center; }
+.banner-container { display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; }
+.banner-container h3 { font-size: 1.8rem; max-width: 400px; color: white; }
+
+/* --- ESTILOS DA CALCULADORA ATUALIZADOS --- */
+.simulator-section { padding: 60px 0; }
+
+.simulator-header {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 3rem auto;
+}
+.simulator-header h2 {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+}
+.simulator-header small {
+    display: block;
+    margin-top: 1rem;
+    color: #666;
+}
+
+.simulator-container { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 2rem; 
+    max-width: 1000px; /* Limita a largura máxima da calculadora */
+    margin: 0 auto;
+}
+
+.simulator-inputs, .simulator-results {
+    border: 1px solid var(--dark-green);
+    border-radius: 8px;
+    padding: 2rem;
+    flex: 1; /* Faz as duas colunas terem o mesmo tamanho */
+    min-height: 570px; /* AUMENTADA A ALTURA MÍNIMA para caber o novo card */
+}
+
+.simulator-inputs h3, .simulator-results h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Card de Inputs da Esquerda */
+.simulator-inputs {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-inputs { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 1.5rem; 
+    margin-bottom: 1.5rem; 
+}
+.input-group { flex: 1; }
+.input-group.full-width { flex-basis: 100%; }
+.input-group label { font-weight: 600; display: block; margin-bottom: 0.5rem; }
+.input-with-prefix { display: flex; border: 1px solid var(--border-color); border-radius: 4px; }
+.input-with-prefix span { padding: 10px; background-color: var(--light-gray-bg); }
+.input-with-prefix input { border: none; padding: 10px; width: 100%; font-size: 1rem; }
+
+/* Botões de Tempo */
+.tempo-options-group { display: flex; border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden; }
+.tempo-btn { flex: 1; background-color: #fff; border: none; padding: 10px; cursor: pointer; font-weight: 600; transition: background-color 0.3s, color 0.3s; font-size: 0.9rem; }
+.tempo-btn + .tempo-btn { border-left: 1px solid var(--border-color); }
+.tempo-btn.selected { background-color: #071F3A; color: white; }
+
+.error-message { color: var(--error-color); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+
+/* Card de Resultados da Direita */
+.simulator-results {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Alinha os resultados no topo */
+}
+
+.result-block { 
+    background-color: #071F3A; 
+    color: white; 
+    padding: 1.5rem; /* Padding interno do bloco de resultado */
+    text-align: center; 
+    border-radius: 8px; 
+    margin-bottom: 1.5rem; /* Espaçamento entre os blocos de resultado */
+}
+.result-block:last-of-type {
+    margin-bottom: 1rem; /* Margem menor para o último bloco */
+}
+
+.result-block p { 
+    font-size: 1.1rem; /* Tamanho do label (ex: "Rendimento Mensal") */
+}
+.result-block strong { 
+    font-size: 2.5rem; /* Tamanho do valor (ex: "R$ 0,00") */
+    display: block; 
+    margin-top: 0.5rem;
+}
+.results-note {
+    font-size: 0.9rem;
+    color: #555;
+    text-align: center;
+    margin-top: auto; /* Empurra a nota para o final do card */
+    padding-top: 1rem;
+}
+
+.simulator-cta { text-align: center; margin-top: 2.5rem; }
+/* --- FIM DOS ESTILOS DA CALCULADORA --- */
+
+
+/* --- SEÇÃO DE FAQ ATUALIZADA --- */
+.faq-section { 
+    padding: 60px 0; 
+    background: var(--dark-green); /* Fundo escuro */
+    color: white; /* Texto padrão branco */
+}
+.faq-container { 
+    max-width: 800px; 
+    text-align: center; 
+}
+.faq-header-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+.faq-header-wrapper h2 {
+    color: white; /* Título principal branco */
+    margin-bottom: 0;
+    font-size: 2.2rem;
+}
+.faq-icon {
+    color: var(--primary-color); /* Ícone com a cor primária verde */
+}
+.faq-subtitle {
+    color: #f0f0f0; /* Subtítulo cinza claro */
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+}
+.faq-accordion .accordion-item { 
+    background-color: rgba(255, 255, 255, 0.05); /* Fundo do item levemente transparente */
+    margin-bottom: 1rem; 
+    border-radius: 8px; 
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Borda levemente transparente */
+    text-align: left; 
+}
+.faq-accordion .accordion-header { 
+    color: white; 
+    font-weight: 600; 
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 1.25rem 1.5rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    position: relative;
+    padding-right: 3rem; /* Espaço para o ícone de chevron */
+}
+/* Novo ícone de chevron (seta) */
+.faq-accordion .accordion-header::after {
+    content: 'v';
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    color: white;
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%) rotate(0deg);
+    transition: transform 0.3s ease-in-out;
+}
+.faq-accordion .accordion-item.active .accordion-header::after {
+    transform: translateY(-50%) rotate(180deg); /* Gira o ícone quando ativo */
+}
+/* Estilo do conteúdo (resposta) */
+.faq-accordion .accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+    padding: 0 1.5rem;
+}
+.faq-accordion .accordion-item.active .accordion-content {
+    max-height: 200px;
+    padding: 0 1.5rem 1.5rem 1.5rem; /* Padding completo quando ativo */
+}
+.faq-accordion .accordion-content p {
+    color: #e0e0e0; /* Cor do texto da resposta (levemente cinza) */
+    line-height: 1.7;
+}
+/* --- FIM DA SEÇÃO DE FAQ --- */
+
+/* Footer */
+.main-footer { background-color: var(--dark-green); color: white; padding: 2rem 0; text-align: center; }
+
+/* Media Queries */
+@media (min-width: 768px) {
+    .hero-container { align-items: center; flex-direction: row; justify-content: space-between; text-align: left; }
+    .hero-content { text-align: left; max-width: 55%; }
+    .hero-content p { margin-left: 0; margin-right: 0; }
+    .hero-form-wrapper { margin: 0 0 0 2rem;}
+    .form-inputs { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
+
+    /* --- Media Query "Quem Organiza" --- */
+    .about-main-content {
+        flex-direction: row; /* Lado a lado no desktop */
+        gap: 3rem;
+    }
+    .about-image {
+        width: 300px; /* Imagem um pouco maior no desktop */
+        height: 300px;
+    }
+    .about-details-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 colunas no desktop */
+    }
+    /* --- Fim da Media Query --- */
+
+    /* --- Media Query ECOSSISTEMA EMPRESARIAL --- */
+    .ecosystem-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 colunas para tablets */
+    }
+    .ecosystem-metrics {
+        flex-direction: row; /* Itens lado a lado no desktop */
+    }
+    /* --- FIM DA Media Query ECOSSISTEMA --- */
+
+    .why-invest-container { flex-direction: row; align-items: stretch; }
+    .history-card, .accordion-card { width: 50%; }
+    .banner-container { flex-direction: row; justify-content:space-around; align-items: center }
+    
+    /* Media query da calculadora */
+    .simulator-container { 
+        flex-direction: row; 
+        align-items: stretch; /* Faz os cards terem a mesma altura */
+    }
+}
+
+@media (min-width: 1024px) {
+    .main-header .logo { width: 350px; margin-left: -320px; }
+    /* --- Media Query ECOSSISTEMA EMPRESARIAL (Desktop) --- */
+    .ecosystem-grid {
+        grid-template-columns: repeat(4, 1fr); /* 4 colunas para desktop */
+    }
+    /* --- FIM DA Media Query ECOSSISTEMA --- */
+}
+
+
+/* Adicionado para ajustar a logo no mobile */
+@media (max-width: 767px) {
+  .main-header .logo { width: 250px; /* Tamanho reduzido para o mobile */ margin-left: auto; /* Centraliza a logo */ margin-right: auto; /* Centraliza a logo */}
+   .hero-form-wrapper { max-width: 400px; /* Adicione esta linha para aumentar a largura */}
+    .hero-content h1 { font-size: 1.5rem; }
+    .hero-content p { font-size: 0.9rem; text-align: left; }
+
+    /* --- Media Query Mobile "Quem Organiza" --- */
+    .about-text {
+        text-align: justify; /* Texto justificado no mobile */
+    }
+    .about-text h3 {
+        text-align: center; /* Centraliza o nome no mobile */
+    }
+    .about-details-grid {
+        gap: 1rem; /* Espaçamento menor no mobile */
+    }
+    /* --- Fim da Media Query --- */
+
+    .history-card p { text-align: justify; }
+    .accordion-card p { text-align: justify; }
+    .accordion-header { margin: 0.10rem 0;}
+    
+    /* Ajuste de altura da calculadora no mobile */
+    .simulator-inputs, .simulator-results {
+        min-height: auto; /* Remove a altura mínima fixa */
+    }
+}
+/* --- Media Queries para Telas Maiores --- */
+
+/* Tablet e telas maiores (a partir de 768px) */
+@media (min-width: 768px) {
+    .main-header .logo { width: 350px; margin-left: -90px; padding: 0 40px; }
+    /* Estilos para tablets em modo retrato e acima */
+    /* Ex: mudar layout para colunas, aumentar fontes, etc. */
+
+}
+
+/* Laptop e telas maiores (a"1024px") */
+@media (min-width: 1024px) {
+    .main-header .logo { width: 350px; margin-left: -90px; padding: 0 40px; }
+    /* Estilos para notebooks e desktops */
+    /* Ex: ajustar espaçamentos, refinar layout de colunas, etc. */
+
+}
+
+/* Laptop L e telas muito grandes (a partir de 1440px) */
+@media (min-width: 1440px) {
+    .main-header .logo { width: 350px; margin-left: -100px; }
+
+}
