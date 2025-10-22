@@ -1,5 +1,5 @@
 :root {
-    --primary-color: #25d366;
+    --primary-color: #25d366; /* Verde do botão foi mantido */
     --dark-green: #071F3A;
     --text-color: #333;
     --background-color: #FFFFFF;
@@ -17,16 +17,17 @@ html {
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: var(--font-family); color: var(--text-color); background-color: var(--background-color); line-height: 1.6; }
+/* ALTERAÇÃO 1: Adicionado fallback genérico 'sans-serif' */
+body { font-family: var(--font-family), sans-serif; color: var(--text-color); background-color: var(--background-color); line-height: 1.6; }
 .container { width: 90%; max-width: 1650px; margin: 0 auto; }
 h1, h2, h3 { color: var(--dark-green); font-weight: 700; line-height: 1.2; }
 img { max-width: 100%; height: auto; display: block; }
 
 .btn { display: inline-block; padding: 12px 24px; border-radius: 50px; border: none; font-weight: 600; cursor: pointer; text-align: center; text-decoration: none; transition: background-color 0.3s, color 0.3s; }
 .btn-primary { background-color: var(--primary-color); color: var(--background-color); font-weight: 700; }
-.btn-primary:hover { background-color: #25d366; }
-.btn-secondary { background-color:#25d366; color: var(--background-color); border: 1px solid var(--dark-green); font-weight: 700; }
-.btn-secondary:hover { background-color:#25d366; }
+.btn-primary:hover { background-color: #21b88a; } /* Ajustar hover se necessário */
+.btn-secondary { background-color: var(--primary-color); color: var(--background-color); border: 1px solid var(--dark-green); font-weight: 700; }
+.btn-secondary:hover { background-color: #21b88a; } /* Ajustar hover se necessário */
 
 .main-header { padding: 1rem 0; position: absolute; width: 100%; z-index: 10; }
 .main-header .logo { width: 350px;}
@@ -45,7 +46,7 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* Formulário da Hero Atualizado */
 .contact-form p { font-weight: 600; margin-bottom: 1rem; text-align: center; }
-.contact-form input, .contact-form select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 4px; margin-bottom: 1rem; font-family: var(--font-family); font-size: 1rem; color: #333; }
+.contact-form input, .contact-form select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 4px; margin-bottom: 1rem; font-family: var(--font-family), sans-serif; /* Garante fonte no form */ font-size: 1rem; color: #333; }
 .contact-form select { appearance: none; background: url("data:image/svg+xml,%3Csvg%20width%3D'12'%20height%3D'8'%20viewBox%3D'0%200%2012%208'%20fill%3D'none'%20xmlns%3D'http%3A//www.w3.org/2000/svg'%3E%3Cpath%20d%3D'M1.41%200.589966L6%205.16997L10.59%200.589966L12%201.99997L6%207.99997L0%201.99997L1.41%200.589966Z'%20fill%3D'%23333'%2F%3E%3C/svg%3E") no-repeat right 12px center; }
 .contact-form select:invalid { color: #666; }
 .contact-form small { display: block; font-size: 0.75rem; margin-bottom: 1.5rem; color: #666; text-align: center; }
@@ -55,8 +56,8 @@ img { max-width: 100%; height: auto; display: block; }
 #form-status.error { color: var(--error-color); }
 
 /* --- NOVOS ESTILOS - SEÇÃO "QUEM ORGANIZA" --- */
-.about-section { 
-    padding: 60px 0; 
+.about-section {
+    padding: 60px 0;
     text-align: left; /* Alterado de 'center' */
     background-color: var(--light-gray-bg); /* Fundo claro da imagem */
 }
@@ -139,7 +140,7 @@ img { max-width: 100%; height: auto; display: block; }
 /* --- SEÇÃO ECOSSISTEMA EMPRESARIAL (AJUSTADA) --- */
 .ecosystem-section {
     padding: 60px 0;
-    background-color: var(--light-gray-bg); 
+    background-color: var(--light-gray-bg);
     text-align: center;
 }
 .ecosystem-title {
@@ -148,14 +149,14 @@ img { max-width: 100%; height: auto; display: block; }
     color: var(--dark-green);
 }
 .ecosystem-title .arck1pro-text {
-    color: var(--primary-color); 
+    color: var(--dark-green); /* Alterado de volta para --dark-green */
 }
 .ecosystem-grid {
     display: grid;
-    grid-template-columns: 1fr; 
+    grid-template-columns: 1fr;
     gap: 1.5rem;
     max-width: 1200px;
-    margin: 0 auto 3rem auto; 
+    margin: 0 auto 3rem auto;
 }
 .ecosystem-card {
     background-color: var(--background-color);
@@ -171,7 +172,7 @@ img { max-width: 100%; height: auto; display: block; }
     color: var(--dark-green);
     margin-bottom: 1rem;
     text-transform: uppercase;
-    border-bottom: 2px solid var(--primary-color); 
+    border-bottom: 2px solid var(--primary-color);
     padding-bottom: 0.5rem;
     min-height: 3.5rem; /* Garante altura mínima para alinhamento */
 }
@@ -179,11 +180,11 @@ img { max-width: 100%; height: auto; display: block; }
     list-style: none;
     padding: 0;
     margin-top: 1rem;
-    flex-grow: 1; 
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-around; 
-    min-height: 150px; 
+    justify-content: space-around;
+    min-height: 150px;
 }
 .ecosystem-card li {
     font-size: 0.9rem;
@@ -198,13 +199,13 @@ img { max-width: 100%; height: auto; display: block; }
 
 .ecosystem-metrics {
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     gap: 1.5rem;
     margin-top: 3rem;
-    max-width: 900px; 
+    max-width: 900px;
     margin-left: auto;
     margin-right: auto;
-    justify-content: space-around; 
+    justify-content: space-around;
 }
 .metric-item {
     text-align: center;
@@ -213,7 +214,7 @@ img { max-width: 100%; height: auto; display: block; }
     display: block;
     font-size: 2.5rem;
     font-weight: 700;
-    color: var(--dark-green);
+    color: var(--dark-green); /* Alterado de volta para --dark-green */
     line-height: 1;
 }
 .metric-description {
@@ -223,8 +224,8 @@ img { max-width: 100%; height: auto; display: block; }
     margin-top: 0.25rem;
 }
 .ecosystem-arck1pro-logo {
-    margin: 3rem auto 0 auto; 
-    width: 200px; 
+    margin: 3rem auto 0 auto;
+    width: 200px;
 }
 /* --- FIM DA NOVA SEÇÃO --- */
 
@@ -234,20 +235,46 @@ img { max-width: 100%; height: auto; display: block; }
 .why-invest-container { display: flex; flex-direction: column; gap: 2rem; }
 .history-card, .accordion-card { padding: 2rem; border-radius: 12px; }
 .history-card { background-color: #fff; background-size: cover; background-position: center; color: var(--dark-green); font-weight: 600; }
-.history-card p { margin-top: 1rem; }
+.history-card p { margin-top: 1rem; font-family: inherit; /* Garante herança da fonte */ }
 .accordion-card { background-color: var(--dark-green); color: white; }
 .accordion-card h3 { color: white; margin-bottom: 0.5rem; }
 .accordion-card .cta-button { margin-top: 1.5rem; }
 
-/* Accordion */
+/* Accordion genérico */
+.accordion { /* Estilo base para todos os accordions */ }
 .accordion-item { border-bottom: 1px solid rgba(255,255,255,0.2); }
 .accordion-item:last-child { border-bottom: none; }
-.accordion-header { width: 100%; background: none; border: none; color: white; text-align: left; padding: 1rem 0; font-size: 1.1rem; font-weight: 600; cursor: pointer; position: relative; padding-left: 2rem; margin: 1rem; }
-.accordion-header::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; border: 2px solid white; border-radius: 50%; transition: background-color 0.3s; }
+.accordion-header {
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 1rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    padding-left: 2rem;
+    margin: 1rem;
+    font-family: inherit; /* Garante herança da fonte para botões dentro de .accordion */
+    color: white; /* Cor padrão para texto do header */
+}
+.accordion-header::before { /* Estilo do ícone de bolinha */
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid white;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
 .accordion-item.active .accordion-header::before { background-color: white; }
 .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, padding 0.3s ease-out; padding-left: 2rem; }
 .accordion-item.active .accordion-content { max-height: 200px; padding-bottom: 1rem; }
-.accordion-content p { color: white; }
+.accordion-content p { color: white; /* Cor padrão para texto do content */ }
 
 /* --- SEÇÃO DE BENEFÍCIOS ATUALIZADA --- */
 .benefits-section {
@@ -255,7 +282,7 @@ img { max-width: 100%; height: auto; display: block; }
     background-color: var(--background-color);
 }
 .benefits-container {
-    max-width: 1000px;
+    max-width: 1000px; /* Aumentado max-width */
     text-align: center; /* Centraliza o H2, a lista (como bloco) e o botão */
 }
 .benefits-section h2 {
@@ -265,7 +292,7 @@ img { max-width: 100%; height: auto; display: block; }
 .benefits-list {
     list-style: none;
     padding: 0;
-    margin: 0; 
+    margin: 0;
     text-align: left; /* Alinha o TEXTO dos LIs à esquerda */
     display: inline-block; /* Faz o <ul> se ajustar ao conteúdo */
     /* O text-align: center do pai (.benefits-container) vai centralizar este bloco */
@@ -325,16 +352,16 @@ img { max-width: 100%; height: auto; display: block; }
     color: #666;
 }
 
-.simulator-container { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 2rem; 
+.simulator-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
     max-width: 1000px; /* Limita a largura máxima da calculadora */
     margin: 0 auto;
 }
 
 .simulator-inputs, .simulator-results {
-    border: 1px solid var(--dark-green);
+    border: 1px solid var(--dark-green); /* Alterado para --dark-green */
     border-radius: 8px;
     padding: 2rem;
     flex: 1; /* Faz as duas colunas terem o mesmo tamanho */
@@ -351,14 +378,21 @@ img { max-width: 100%; height: auto; display: block; }
 /* Card de Inputs da Esquerda */
 .simulator-inputs {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Revertido para column */
+    /* justify-content: center; Removido */
+}
+.simulator-inputs p { /* Estilo para o texto abaixo do label PRAZO */
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 0.5rem; /* Espaço antes dos botões */
 }
 
-.form-inputs { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 1.5rem; 
-    margin-bottom: 1.5rem; 
+
+.form-inputs {
+    display: flex;
+    flex-direction: column; /* Revertido para column */
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
 }
 .input-group { flex: 1; }
 .input-group.full-width { flex-basis: 100%; }
@@ -382,24 +416,24 @@ img { max-width: 100%; height: auto; display: block; }
     justify-content: flex-start; /* Alinha os resultados no topo */
 }
 
-.result-block { 
-    background-color: #071F3A; 
-    color: white; 
+.result-block {
+    background-color: #071F3A;
+    color: white;
     padding: 1.5rem; /* Padding interno do bloco de resultado */
-    text-align: center; 
-    border-radius: 8px; 
+    text-align: center;
+    border-radius: 8px;
     margin-bottom: 1.5rem; /* Espaçamento entre os blocos de resultado */
 }
 .result-block:last-of-type {
     margin-bottom: 1rem; /* Margem menor para o último bloco */
 }
 
-.result-block p { 
+.result-block p {
     font-size: 1.1rem; /* Tamanho do label (ex: "Rendimento Mensal") */
 }
-.result-block strong { 
+.result-block strong {
     font-size: 2.5rem; /* Tamanho do valor (ex: "R$ 0,00") */
-    display: block; 
+    display: block;
     margin-top: 0.5rem;
 }
 .results-note {
@@ -415,14 +449,14 @@ img { max-width: 100%; height: auto; display: block; }
 
 
 /* --- SEÇÃO DE FAQ ATUALIZADA --- */
-.faq-section { 
-    padding: 60px 0; 
+.faq-section {
+    padding: 60px 0;
     background: var(--dark-green); /* Fundo escuro */
     color: white; /* Texto padrão branco */
 }
-.faq-container { 
-    max-width: 800px; 
-    text-align: center; 
+.faq-container {
+    max-width: 800px;
+    text-align: center;
 }
 .faq-header-wrapper {
     display: flex;
@@ -437,23 +471,24 @@ img { max-width: 100%; height: auto; display: block; }
     font-size: 2.2rem;
 }
 .faq-icon {
-    color: var(--primary-color); /* Ícone com a cor primária verde */
+    color: #FFD700; /* Dourado para o ícone */
 }
 .faq-subtitle {
     color: #f0f0f0; /* Subtítulo cinza claro */
     font-size: 1.1rem;
     margin-bottom: 2.5rem;
 }
-.faq-accordion .accordion-item { 
+.faq-accordion .accordion-item {
     background-color: rgba(255, 255, 255, 0.05); /* Fundo do item levemente transparente */
-    margin-bottom: 1rem; 
-    border-radius: 8px; 
+    margin-bottom: 1rem;
+    border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.1); /* Borda levemente transparente */
-    text-align: left; 
+    text-align: left;
 }
-.faq-accordion .accordion-header { 
-    color: white; 
-    font-weight: 600; 
+.faq-accordion .accordion-header {
+    font-family: inherit; /* ALTERAÇÃO 2: Força herança da fonte Poppins */
+    color: white;
+    font-weight: 600;
     width: 100%;
     background: none;
     border: none;
@@ -467,7 +502,7 @@ img { max-width: 100%; height: auto; display: block; }
 /* Novo ícone de chevron (seta) */
 .faq-accordion .accordion-header::after {
     content: 'v';
-    font-family: 'Poppins', sans-serif;
+    /* font-family: 'Poppins', sans-serif; REMOVIDO - usa fonte do header */
     font-weight: 700;
     color: white;
     position: absolute;
@@ -487,7 +522,7 @@ img { max-width: 100%; height: auto; display: block; }
     padding: 0 1.5rem;
 }
 .faq-accordion .accordion-item.active .accordion-content {
-    max-height: 200px;
+    max-height: 200px; /* Ajuste se necessário para respostas mais longas */
     padding: 0 1.5rem 1.5rem 1.5rem; /* Padding completo quando ativo */
 }
 .faq-accordion .accordion-content p {
@@ -533,10 +568,10 @@ img { max-width: 100%; height: auto; display: block; }
     .why-invest-container { flex-direction: row; align-items: stretch; }
     .history-card, .accordion-card { width: 50%; }
     .banner-container { flex-direction: row; justify-content:space-around; align-items: center }
-    
+
     /* Media query da calculadora */
-    .simulator-container { 
-        flex-direction: row; 
+    .simulator-container {
+        flex-direction: row;
         align-items: stretch; /* Faz os cards terem a mesma altura */
     }
 }
@@ -572,8 +607,8 @@ img { max-width: 100%; height: auto; display: block; }
 
     .history-card p { text-align: justify; }
     .accordion-card p { text-align: justify; }
-    .accordion-header { margin: 0.10rem 0;}
-    
+    /*.accordion-header { margin: 0.10rem 0;} Removido - Estilos do FAQ são mais específicos */
+
     /* Ajuste de altura da calculadora no mobile */
     .simulator-inputs, .simulator-results {
         min-height: auto; /* Remove a altura mínima fixa */
