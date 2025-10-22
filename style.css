@@ -7,7 +7,7 @@
     --border-color: #071F3A;
     --error-color: #D32F2F;
     --success-color: #071F3A;
-    --font-family: 'Poppins', system-ui, sans-serif;
+    --font-family: 'Poppins';
 }
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
