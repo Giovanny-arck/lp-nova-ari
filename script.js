@@ -4,6 +4,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const WEBHOOK_URL_1 = 'https://n8nwebhook.arck1pro.shop/webhook/lp-lead-direto';
     const WEBHOOK_URL_2 = 'https://n8nwebhook.arck1pro.shop/webhook/lp-lead-direto-rdmkt';
 
+    // --- INICIALIZAÇÃO DO CAMPO DE TELEFONE INTERNACIONAL ---
+    const phoneInput = document.getElementById('telefone');
+    let iti; // Variável para guardar a instância da biblioteca
+
+    if (phoneInput) {
+        iti = window.intlTelInput(phoneInput, {
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/19.2.16/js/utils.js", // Necessário para validação e formatação
+            initialCountry: "auto",
+            geoIpLookup: function(success, failure) {
+                fetch("https://ipapi.co/json")
+                    .then(res => res.json())
+                    .then(data => success(data.country_code))
+                    .catch(() => success("br")); // Fallback para Brasil
+            },
+            preferredCountries: ['br', 'pt', 'us'] // Países preferenciais
+        });
+    }
+
     // --- FORMULÁRIO DA HERO SECTION (UTMs e Webhook) ---
     const contactForm = document.getElementById('contact-form');
     if (contactForm) {
@@ -35,16 +53,23 @@ document.addEventListener('DOMContentLoaded', () => {
         formStatus.textContent = '';
         formStatus.className = '';
 
+        // --- VALIDAÇÃO DO TELEFONE INTERNACIONAL ---
+        if (iti && !iti.isValidNumber()) {
+            formStatus.textContent = 'Por favor, insira um número de telefone válido.';
+            formStatus.className = 'error';
+            submitButton.disabled = false;
+            submitButton.textContent = 'QUERO ME REGISTRAR';
+            return; // Para a submissão se o número for inválido
+        }
+        // --- FIM DA VALIDAÇÃO ---
+
+
         const formData = new FormData(contactForm);
         const data = Object.fromEntries(formData.entries());
 
         // --- FORMATAÇÃO DO TELEFONE ---
-        let formattedPhone = data.whatsapp || '';
-        formattedPhone = formattedPhone.replace(/\D/g, '');
-        if (formattedPhone.startsWith('55')) {
-            formattedPhone = formattedPhone.substring(2);
-        }
-        formattedPhone = '+55' + formattedPhone;
+        // Pega o número internacional completo (ex: +554799999999)
+        const formattedPhone = iti ? iti.getNumber() : data.whatsapp; 
         // --- FIM DA FORMATAÇÃO ---
 
         const payload = {
@@ -70,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
                               (result2.status === 'fulfilled' && result2.value.ok);
 
             if (isSuccess) {
-                formStatus.textContent = 'Dados enviados com sucesso!';
+                formStatus.textContent = 'Dados enviados com sucesso! Redirecionando...'; // MENSAGEM ATUALIZADA
                 formStatus.className = 'success';
                 contactForm.reset();
 
@@ -80,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     fbq('track', 'Lead', {
                         name: data.nome || '',
                         email: data.email || '',
-                        phone: data.whatsapp || '',
+                        phone: formattedPhone || '', // Envia o número formatado
                         utm_source: payload.utms.utm_source || ''
                     });
                     console.log("Evento Meta Pixel 'Lead' disparado");
@@ -90,6 +115,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     fbq('track', 'CompleteRegistration', {}, { eventID: eventId });
                     console.log("Evento Meta Pixel 'CompleteRegistration' disparado com eventID:", eventId);
                 }
+
+                // --- REDIRECIONAMENTO PARA PÁGINA DE OBRIGADO ---
+                setTimeout(() => {
+                    window.location.href = 'obrigado.html';
+                }, 1000); // Delay de 1 segundo para o usuário ler a mensagem e o pixel disparar
+
             } else {
                 throw new Error('Falha no envio para ambos os webhooks.');
             }
@@ -98,8 +129,11 @@ document.addEventListener('DOMContentLoaded', () => {
             formStatus.textContent = 'Erro ao enviar. Tente novamente.';
             formStatus.className = 'error';
         } finally {
-            submitButton.disabled = false;
-            submitButton.textContent = 'QUERO ME REGISTRAR';
+            // Não reabilita o botão se o envio foi sucesso (pois vai redirecionar)
+            if (formStatus.className !== 'success') {
+                submitButton.disabled = false;
+                submitButton.textContent = 'QUERO ME REGISTRAR';
+            }
         }
     }
 
@@ -200,14 +234,14 @@ document.addEventListener('DOMContentLoaded', () => {
             jurosTotalResultBlock.style.display = 'block';
             jurosTotalResultLabel.textContent = 'Valor Total no Período:'; // <-- LABEL ATUALIZADO AQUI
             totalFinalResultBlock.style.display = 'none'; // Esconde o total final separado
-            noteFinal.style.display = 'none';
-            noteMensal.style.display = 'block';
+            if (noteFinal) noteFinal.style.display = 'none';
+            if (noteMensal) noteMensal.style.display = 'block';
         } else { // formaSelecionada === 'final'
             mensalResultBlock.style.display = 'none'; // Esconde mensal
             jurosTotalResultBlock.style.display = 'none'; // Esconde o bloco que agora é do total mensal
             totalFinalResultBlock.style.display = 'block'; // Mostra o total final
-            noteFinal.style.display = 'block';
-            noteMensal.style.display = 'none';
+            if (noteFinal) noteFinal.style.display = 'block';
+            if (noteMensal) noteMensal.style.display = 'none';
         }
     }
 
