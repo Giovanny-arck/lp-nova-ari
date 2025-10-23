@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muito Obrigado!</title>
+    <link rel="shortcut icon" href="/img/favicon-ari.webp" type="image/x-icon">
+    <style>
+        /* --- Configurações Gerais --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 10px 20px 0; /* Espaçamento no topo e laterais */
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Container (invisível, para layout) --- */
+        .container {
+            max-width: 700px;
+            width: 100%;
+            margin: 0 auto;
+            text-align: center;
+            box-sizing: border-box;
+            flex-grow: 1; 
+        }
+
+        /* --- 1. Logo --- */
+        .logo {
+            max-width: 720px;
+            height: auto;
+            margin-bottom: 25px;
+            border-radius: 10px;
+        }
+
+
+        @keyframes pulse-animation {
+            0% { transform: scale(0.95); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(0.95); }
+        }
+
+        /* --- 3. Frase "Muito Obrigado!" --- */
+        h1 {
+            font-size: 2.8em;
+            color: #2c3e50;
+            margin: 10px 0;
+            font-weight: 700;
+        }
+
+        /* --- 4. Frase "Conheça um pouco mais..." --- */
+        .sub-heading {
+            font-size: 1.2em;
+            color: #555;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+        
+        /* --- 5. Vídeo --- */
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            background-color: #000;
+            margin-bottom: 30px;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        
+        /* --- 6 & 7. Textos de Contato --- */
+        .contact-text {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #444;
+            margin-bottom: 15px;
+        }
+        
+        .contact-text-secondary {
+            font-size: 1.05em;
+            line-height: 1.6;
+            color: #444;
+            margin-bottom: 25px;
+        }
+
+        /* --- 8. Botão WhatsApp --- */
+        .whatsapp-button {
+            display: inline-block;
+            background-color: #25d366;
+            color: #ffffff;
+            padding: 14px 28px;
+            font-size: 1.1em;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-bottom: 20px; 
+            margin-top: 30px;
+        }
+
+        .whatsapp-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+        }
+
+        /* --- Footer --- */
+        footer {
+            width: 100%;
+            padding: 30px 20px;
+            margin-top: 40px;
+            border-top: 1px solid #dde3e0;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .footer-content {
+            max-width: 700px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        footer p {
+            font-size: 0.9em;
+            color: #888;
+            margin: 5px 0;
+            line-height: 1.5;
+        }
+
+        /* -------------------------------------------
+        --- MEDIA QUERIES QUE CORRIGEM O MOBILE ---
+        -------------------------------------------
+        Regras para telas com 600px de largura ou menos (celulares)
+        */
+        
+        @media (max-width: 600px) {
+            body {
+                /* Diminui o espaçamento lateral para o texto não vazar */
+                padding: 20px 5px 5px 5px; 
+            }
+
+            .logo {
+                max-width: 420px; /* Logo um pouco menor */
+            }
+
+            h1 {
+                font-size: 2.2em; /* Título principal menor */
+            }
+
+            .sub-heading {
+                font-size: 1.1em;
+            }
+
+            .contact-text,
+            .contact-text-secondary {
+                font-size: 1em; /* Textos de contato com tamanho padrão */
+                line-height: 1.5;
+            }
+
+            .whatsapp-button {
+                padding: 12px 24px; /* Botão ligeiramente menor */
+                font-size: 1em;
+            }
+
+            footer {
+                margin-top: 30px;
+                padding: 25px 15px; /* Espaçamento menor no rodapé */
+            }
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <img src="/img/capa simulador atual.png" alt="Logo da Empresa" class="logo">
+
+        <h1>Muito Obrigado!</h1>
+
+        <p class="sub-heading">Conheça um pouco mais sobre o ARI-Ativo de Renda Imobiliária</p>
+
+        <div class="video-wrapper">
+            <iframe
+                src="https://www.youtube.com/embed/g0AaY44D8T0?autoplay=1&controls=1&loop=1&playlist=g0AaY44D8T0&rel=0&showinfo=0"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <p class="contact-text">
+            Fique atento ao seu celular, pois em breve nosso time entrará em contato com você!
+        </p>
+
+        <p class="contact-text-secondary">
+            Se preferir falar com nosso time comercial agora, é só clicar no botão abaixo
+        </p>
+
+        <a href="https://wa.me/5547992236311" class="whatsapp-button" target="_blank" rel="noopener noreferrer">
+            Falar com time comercial
+        </a>
+
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>
+                © <span id="current-year">2025</span>
+                ARCK1PRO. Todos os direitos reservados.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+
+</body>
+</html>
