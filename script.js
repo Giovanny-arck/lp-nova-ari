@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     // --- URLs DOS WEBHOOKS (SUBSTITUA PELOS SEUS) ---
     const WEBHOOK_URL_1 = 'https://n8nwebhook.arck1pro.shop/webhook/lp-lead-direto';
     const WEBHOOK_URL_2 = 'https://n8nwebhook.arck1pro.shop/webhook/lp-lead-direto-rdmkt';
@@ -37,17 +37,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const formData = new FormData(contactForm);
         const data = Object.fromEntries(formData.entries());
-        
+
         // --- FORMATAÇÃO DO TELEFONE ---
-        // Pega o número de telefone do formulário
         let formattedPhone = data.whatsapp || '';
-        // 1. Remove tudo que não for dígito (como "(", ")", "-", " ")
         formattedPhone = formattedPhone.replace(/\D/g, '');
-        // 2. Remove o "55" do início, se o usuário já tiver digitado, para evitar duplicidade
         if (formattedPhone.startsWith('55')) {
             formattedPhone = formattedPhone.substring(2);
         }
-        // 3. Adiciona o prefixo +55 ao número limpo
         formattedPhone = '+55' + formattedPhone;
         // --- FIM DA FORMATAÇÃO ---
 
@@ -70,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 fetch(WEBHOOK_URL_2, requestOptions)
             ]);
 
-            const isSuccess = (result1.status === 'fulfilled' && result1.value.ok) || 
+            const isSuccess = (result1.status === 'fulfilled' && result1.value.ok) ||
                               (result2.status === 'fulfilled' && result2.value.ok);
 
             if (isSuccess) {
@@ -111,14 +107,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- LÓGICA DA CALCULADORA ATUALIZADA ---
     const valorInput = document.getElementById('valor-aplicado');
     const tempoBtns = document.querySelectorAll('.tempo-btn');
+    const formaBtns = document.querySelectorAll('.forma-btn'); // Botões de modalidade
     const valorError = document.getElementById('valor-error');
-    
-    // Seletores para os displays de resultado
-    const mensalResultDisplay = document.getElementById('result-value-mensal');
-    const valleResultDisplay = document.getElementById('valle-result');
-    const totalFinalResultDisplay = document.getElementById('result-value-total-final'); // NOVO SELETOR
+
+    // Seletores para os blocos e valores de resultado
+    const mensalResultBlock = document.getElementById('result-block-mensal');
+    const mensalResultValue = document.getElementById('result-value-mensal');
+
+    const jurosTotalResultBlock = document.getElementById('result-block-juros-total');
+    const jurosTotalResultLabel = document.getElementById('result-label-juros-total'); // Label para texto dinâmico
+    const jurosTotalResultValue = document.getElementById('result-value-juros-total');
+
+    const totalFinalResultBlock = document.getElementById('result-block-total-final');
+    const totalFinalResultValue = document.getElementById('result-value-total-final');
+
+    // Seletores para as notas de observação
+    const noteFinal = document.getElementById('results-note-final');
+    const noteMensal = document.getElementById('results-note-mensal');
+
 
     let mesesSelecionados = 0;
+    let formaSelecionada = 'final'; // Começa com "Rendimento no Final" selecionado
 
     const taxaPrazo = {
         18: { mensal: 0.015, final: 0.015 }, 24: { mensal: 0.016, final: 0.016 }, 36: { mensal: 0.018, final: 0.018 }
@@ -142,51 +151,86 @@ document.addEventListener('DOMContentLoaded', () => {
     function calcularSimulacao() {
         const valorStr = valorInput.value.replace(/\./g, '').replace(',', '.');
         const valor = parseFloat(valorStr) || 0;
-        
+
+        // Validação do valor mínimo
         if (valor > 0 && valor < valorMinimo) {
             valorError.style.display = 'block';
             resetarResultados();
+            updateResultVisibility(); // Atualiza visibilidade mesmo resetando
             return;
         } else {
             valorError.style.display = 'none';
         }
 
+        // Se valor ou prazo não válidos, reseta
         if (valor < valorMinimo || mesesSelecionados === 0) {
             resetarResultados();
+            updateResultVisibility(); // Atualiza visibilidade mesmo resetando
             return;
         }
 
         const taxaExtraValor = obterTaxaExtraPorValor(valor);
 
-        // 1. Calcular Rendimento Mensal
+        // --- Cálculos ---
+        // Mensal
         const taxaBaseMensal = taxaPrazo[mesesSelecionados].mensal;
         const taxaTotalMensal = taxaBaseMensal + taxaExtraValor;
         const resultadoMensal = valor * taxaTotalMensal;
+        const totalJurosMensalPeriodo = resultadoMensal * mesesSelecionados;
+        const resultadoTotalMensalPeriodo = valor + totalJurosMensalPeriodo; // <-- NOVO CÁLCULO
 
-        // 2. Calcular Rendimento Final (Juros)
+        // Final
         const taxaBaseFinal = taxaPrazo[mesesSelecionados].final;
         const taxaTotalFinal = taxaBaseFinal + taxaAdicionalFinal + taxaExtraValor;
         const resultadoFinalJuros = (valor * taxaTotalFinal) * mesesSelecionados;
-
-        // 3. NOVO CÁLCULO: Valor Total ao Final (Capital + Juros)
         const resultadoTotalFinal = valor + resultadoFinalJuros;
-        
-        // 4. Atualizar os três displays
-        mensalResultDisplay.textContent = formatarMoeda(resultadoMensal);
-        valleResultDisplay.textContent = formatarMoeda(resultadoFinalJuros);
-        totalFinalResultDisplay.textContent = formatarMoeda(resultadoTotalFinal); // ATUALIZA NOVO DISPLAY
+
+        // --- Atualiza os displays com os valores calculados ---
+        mensalResultValue.textContent = formatarMoeda(resultadoMensal);
+        jurosTotalResultValue.textContent = formatarMoeda(resultadoTotalMensalPeriodo); // <-- VALOR ATUALIZADO AQUI
+        totalFinalResultValue.textContent = formatarMoeda(resultadoTotalFinal);
+
+        // Atualiza a visibilidade e labels dos blocos baseado na formaSelecionada
+        updateResultVisibility();
     }
-    
+
+    function updateResultVisibility() {
+        if (formaSelecionada === 'mensal') {
+            mensalResultBlock.style.display = 'block';
+            jurosTotalResultBlock.style.display = 'block';
+            jurosTotalResultLabel.textContent = 'Valor Total no Período:'; // <-- LABEL ATUALIZADO AQUI
+            totalFinalResultBlock.style.display = 'none'; // Esconde o total final separado
+            noteFinal.style.display = 'none';
+            noteMensal.style.display = 'block';
+        } else { // formaSelecionada === 'final'
+            mensalResultBlock.style.display = 'none'; // Esconde mensal
+            jurosTotalResultBlock.style.display = 'none'; // Esconde o bloco que agora é do total mensal
+            totalFinalResultBlock.style.display = 'block'; // Mostra o total final
+            noteFinal.style.display = 'block';
+            noteMensal.style.display = 'none';
+        }
+    }
+
     function resetarResultados() {
-        valleResultDisplay.textContent = 'R$ 0,00';
-        mensalResultDisplay.textContent = 'R$ 0,00';
-        totalFinalResultDisplay.textContent = 'R$ 0,00'; // RESETA NOVO DISPLAY
+        mensalResultValue.textContent = 'R$ 0,00';
+        jurosTotalResultValue.textContent = 'R$ 0,00';
+        totalFinalResultValue.textContent = 'R$ 0,00';
     }
-    
+
+    // --- EVENT LISTENERS ---
     valorInput.addEventListener('input', (e) => {
         let value = e.target.value.replace(/\D/g, '');
         e.target.value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
         calcularSimulacao();
+    });
+
+    formaBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            formaBtns.forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            formaSelecionada = btn.dataset.forma;
+            calcularSimulacao(); // Recalcula e atualiza a visibilidade
+        });
     });
 
     tempoBtns.forEach(btn => {
@@ -198,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- LÓGICA DO ACORDEÃO ---
+    // --- LÓGICA DO ACORDEÃO (FAQ e outros) ---
     const accordions = document.querySelectorAll('.accordion');
     accordions.forEach(accordion => {
         const items = accordion.querySelectorAll('.accordion-item');
@@ -206,13 +250,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const header = item.querySelector('.accordion-header');
             header.addEventListener('click', () => {
                 const isActive = item.classList.contains('active');
-                
+
+                // Fecha todos os itens no mesmo accordion antes de abrir o clicado (se não for o mesmo)
                 const parentAccordion = header.closest('.accordion');
                 parentAccordion.querySelectorAll('.accordion-item').forEach(otherItem => {
-                    otherItem.classList.remove('active');
-                    otherItem.querySelector('.accordion-header').setAttribute('aria-expanded', 'false');
+                    if (otherItem !== item || isActive) { // Fecha outros ou o atual se ele já estava ativo
+                       otherItem.classList.remove('active');
+                       otherItem.querySelector('.accordion-header').setAttribute('aria-expanded', 'false');
+                    }
                 });
 
+                // Abre o item clicado (se ele não estava ativo)
                 if (!isActive) {
                     item.classList.add('active');
                     header.setAttribute('aria-expanded', 'true');
@@ -220,4 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
+
+    // Inicializa a visibilidade correta ao carregar a página
+    updateResultVisibility();
 });
