@@ -12,7 +12,6 @@
             background-color: #f4f7f6;
             color: #333;
             margin: 0;
-            padding: 10px 20px 0; /* Espaçamento no topo e laterais */
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -29,24 +28,27 @@
             flex-grow: 1; 
         }
 
+        /* -------------------------------------------
+        --- BASE (Mobile < 768px) ---
+        ------------------------------------------- */
+        
+        body {
+            /* Espaçamento melhorado para celulares */
+            padding: 30px 20px 0; 
+        }
+
         /* --- 1. Logo --- */
         .logo {
-            max-width: 720px;
+            /* CORREÇÃO: max-width: 100% garante que a logo nunca saia do container */
+            max-width: 100%; 
             height: auto;
             margin-bottom: 25px;
             border-radius: 10px;
         }
 
-
-        @keyframes pulse-animation {
-            0% { transform: scale(0.95); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(0.95); }
-        }
-
         /* --- 3. Frase "Muito Obrigado!" --- */
         h1 {
-            font-size: 2.8em;
+            font-size: 2.2em; /* Tamanho para mobile */
             color: #2c3e50;
             margin: 10px 0;
             font-weight: 700;
@@ -54,7 +56,7 @@
 
         /* --- 4. Frase "Conheça um pouco mais..." --- */
         .sub-heading {
-            font-size: 1.2em;
+            font-size: 1.1em; /* Tamanho para mobile */
             color: #555;
             margin-bottom: 30px;
             font-weight: 500;
@@ -81,17 +83,15 @@
         }
         
         /* --- 6 & 7. Textos de Contato --- */
-        .contact-text {
-            font-size: 1.1em;
-            line-height: 1.6;
+        .contact-text,
+        .contact-text-secondary {
+            font-size: 1em; /* Tamanho para mobile */
+            line-height: 1.5;
             color: #444;
             margin-bottom: 15px;
         }
         
         .contact-text-secondary {
-            font-size: 1.05em;
-            line-height: 1.6;
-            color: #444;
             margin-bottom: 25px;
         }
 
@@ -100,8 +100,8 @@
             display: inline-block;
             background-color: #25d366;
             color: #ffffff;
-            padding: 14px 28px;
-            font-size: 1.1em;
+            padding: 12px 24px; /* Tamanho para mobile */
+            font-size: 1em; /* Tamanho para mobile */
             font-weight: 600;
             text-decoration: none;
             border-radius: 50px;
@@ -118,8 +118,8 @@
         /* --- Footer --- */
         footer {
             width: 100%;
-            padding: 30px 20px;
-            margin-top: 40px;
+            padding: 25px 15px; /* Tamanho para mobile */
+            margin-top: 30px; /* Tamanho para mobile */
             border-top: 1px solid #dde3e0;
             text-align: center;
             box-sizing: border-box;
@@ -139,43 +139,51 @@
         }
 
         /* -------------------------------------------
-        --- MEDIA QUERIES QUE CORRIGEM O MOBILE ---
-        -------------------------------------------
-        Regras para telas com 600px de largura ou menos (celulares)
-        */
-        
-        @media (max-width: 600px) {
+        --- MEDIA QUERY (Tablets >= 768px) ---
+        ------------------------------------------- */
+        @media (min-width: 768px) {
             body {
-                /* Diminui o espaçamento lateral para o texto não vazar */
-                padding: 20px 5px 5px 5px; 
-            }
-
-            .logo {
-                max-width: 420px; /* Logo um pouco menor */
+                padding: 40px 20px 0; /* Aumenta padding do topo */
             }
 
             h1 {
-                font-size: 2.2em; /* Título principal menor */
+                font-size: 2.5em; /* Aumenta fonte */
             }
 
             .sub-heading {
-                font-size: 1.1em;
+                font-size: 1.15em;
             }
 
             .contact-text,
             .contact-text-secondary {
-                font-size: 1em; /* Textos de contato com tamanho padrão */
-                line-height: 1.5;
+                font-size: 1.05em;
             }
 
             .whatsapp-button {
-                padding: 12px 24px; /* Botão ligeiramente menor */
-                font-size: 1em;
+                padding: 14px 28px;
+                font-size: 1.1em;
             }
 
             footer {
-                margin-top: 30px;
-                padding: 25px 15px; /* Espaçamento menor no rodapé */
+                margin-top: 40px;
+                padding: 30px 20px;
+            }
+        }
+        
+        /* -------------------------------------------
+        --- MEDIA QUERY (Notebooks/Desktops >= 1025px) ---
+        ------------------------------------------- */
+        @media (min-width: 1025px) {
+            h1 {
+                font-size: 2.8em; /* Fontes maiores para desktop */
+            }
+
+            .sub-heading {
+                font-size: 1.2em;
+            }
+
+            .contact-text {
+                font-size: 1.1em;
             }
         }
         
