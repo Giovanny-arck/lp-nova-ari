@@ -341,7 +341,7 @@ img { max-width: 100%; height: auto; display: block; }
     margin: 0 auto;
 }
 
-.simulator-inputs, .simulator-results {
+.simulator-inputs, .simulator- {
     border: 1px solid var(--dark-green); /* Alterado para --dark-green */
     border-radius: 8px;
     padding: 2rem;
@@ -349,7 +349,7 @@ img { max-width: 100%; height: auto; display: block; }
     min-height: 450px; /* Altura mínima aumentada */
 }
 
-.simulator-inputs h3, .simulator-results h3 {
+.simulator-inputs h3, .simulator- h3 {
     font-size: 1.25rem;
     margin-bottom: 1.5rem;
     padding-bottom: 0.5rem;
@@ -397,7 +397,7 @@ img { max-width: 100%; height: auto; display: block; }
 .error-message { color: var(--error-color); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
 
 /* Card de Resultados da Direita */
-.simulator-results {
+.simulator- {
     display: flex;
     flex-direction: column;
     justify-content: flex-start; /* Alinha os resultados no topo */
@@ -428,6 +428,16 @@ img { max-width: 100%; height: auto; display: block; }
     margin-top: auto; /* Empurra a nota para o final do card */
     padding-top: 1rem;
     transition: display 0.3s ease; /* Transição suave */
+}
+
+/* NOVO ESTILO: Termo de Responsabilidade */
+.simulator-disclaimer {
+    font-size: 0.8rem; /* Tamanho menor */
+    color: #666; /* Cor cinza */
+    text-align: center; /* Centralizado */
+    max-width: 800px; /* Limita a largura */
+    margin: 1.5rem auto 1.5rem auto; /* Espaçamento acima/abaixo e centraliza horizontalmente */
+    line-height: 1.5; /* Espaçamento entre linhas */
 }
 
 .simulator-cta { text-align: center; margin-top: 2.5rem; }
