@@ -113,8 +113,8 @@ img { max-width: 100%; height: auto; display: block; }
 }
 .about-details-grid li {
     position: relative;
-    padding-left: 30px; /* Espaço para o checkmark */
-    font-size: 0.80rem;
+    padding-left: 35px; /* Espaço para o checkmark */
+    font-size: 0.95rem;
     font-weight: 500;
 }
 .about-details-grid li::before {
@@ -230,104 +230,85 @@ img { max-width: 100%; height: auto; display: block; }
 /* --- FIM DA NOVA SEÇÃO --- */
 
 
-/* Why Invest Section */
-.why-invest-section { padding: 60px 0; background-color: var(--light-gray-bg); }
-.why-invest-container { display: flex; flex-direction: column; gap: 2rem; }
-.history-card, .accordion-card { padding: 2rem; border-radius: 12px; }
-.history-card { background-color: #fff; background-size: cover; background-position: center; color: var(--dark-green); font-weight: 600; }
-.history-card p { margin-top: 1rem; font-family: inherit; /* Garante herança da fonte */ }
-.accordion-card { background-color: var(--dark-green); color: white; }
-.accordion-card h3 { color: white; margin-bottom: 0.5rem; }
-.accordion-card .cta-button { margin-top: 1.5rem; }
-
-/* Accordion genérico */
-.accordion { /* Estilo base para todos os accordions */ }
-.accordion-item { border-bottom: 1px solid rgba(255,255,255,0.2); }
-.accordion-item:last-child { border-bottom: none; }
-.accordion-header {
-    width: 100%;
-    background: none;
-    border: none;
-    text-align: left;
-    padding: 1rem 0;
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    position: relative;
-    padding-left: 2rem;
-    margin: 1rem;
-    font-family: inherit; /* Garante herança da fonte para botões dentro de .accordion */
-    color: white; /* Cor padrão para texto do header */
-}
-.accordion-header::before { /* Estilo do ícone de bolinha */
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 16px;
-    height: 16px;
-    border: 2px solid white;
-    border-radius: 50%;
-    transition: background-color 0.3s;
-}
-.accordion-item.active .accordion-header::before { background-color: white; }
-.accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, padding 0.3s ease-out; padding-left: 2rem; }
-.accordion-item.active .accordion-content { max-height: 200px; padding-bottom: 1rem; }
-.accordion-content p { color: white; /* Cor padrão para texto do content */ }
-
-/* --- SEÇÃO DE BENEFÍCIOS ATUALIZADA --- */
-.benefits-section {
+/* --- NOVA SEÇÃO COMBINADA "WHY & BENEFITS" --- */
+.why-benefits-section {
     padding: 60px 0;
-    background-color: var(--background-color);
+    background-color: var(--background-color); /* Fundo cinza claro para a seção inteira */
 }
-.benefits-container {
-    max-width: 1000px; /* Aumentado max-width */
-    text-align: center; /* Centraliza o H2, a lista (como bloco) e o botão */
+.why-benefits-grid {
+    display: flex;
+    flex-direction: column; /* Mobile first: empilhado */
+    gap: 5rem;
+    max-width: 1200px; /* Ajuste a largura máxima conforme necessário */
+    margin: 0 auto;
+    align-items: stretch; /* Garante que os cards tenham a mesma altura */
 }
-.benefits-section h2 {
-    font-size: 2.2rem;
-    margin-bottom: 2.5rem;
+.why-benefits-card {
+    background-color: var(--background-color); /* Fundo branco para os cards */
+    padding: 3rem 2.5rem; /* <-- ALTERAÇÃO AQUI: Padding vertical aumentado */
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08); /* Sombra suave */
+    flex: 1; /* Faz os cards terem a mesma largura quando em linha */
+    display: flex; /* Adicionado para permitir alinhamento interno */
+    flex-direction: column; /* Adicionado para alinhar título e conteúdo */
 }
-.benefits-list {
+.why-benefits-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: var(--dark-green);
+    text-align: center; /* Centraliza títulos dos cards */
+}
+.why-benefits-card p {
+    margin-bottom: 1rem;
+    font-family: inherit;
+    text-align: justify; /* Justifica o texto */
+    color: var(--text-color);
+    line-height: 1.7;
+}
+.why-benefits-card p:last-of-type {
+    margin-bottom: 0;
+}
+/* Estilos reutilizados para a lista de benefícios dentro do card */
+.why-benefits-card .benefits-list {
     list-style: none;
     padding: 0;
-    margin: 0;
-    text-align: left; /* Alinha o TEXTO dos LIs à esquerda */
-    display: inline-block; /* Faz o <ul> se ajustar ao conteúdo */
-    /* O text-align: center do pai (.benefits-container) vai centralizar este bloco */
+    margin: 0 auto; /* Centraliza a lista dentro do card */
+    text-align: left;
+    display: inline-block; /* Ajusta ao conteúdo */
+    margin-top: auto; /* Empurra a lista para baixo se houver espaço */
+    margin-bottom: auto; /* Empurra a lista para cima se houver espaço */
 }
-.benefits-list li {
-    font-size: 1.2rem;
+.why-benefits-card .benefits-list li {
+    font-size: 1.1rem; /* Ajuste o tamanho se necessário */
     font-weight: 600;
     color: var(--text-color);
     position: relative;
-    padding-left: 40px; /* Espaço para o ícone */
-    margin-bottom: 1.25rem;
+    padding-left: 40px;
+    margin-bottom: 1rem; /* Ajuste o espaçamento se necessário */
 }
-.benefits-list li:last-child {
-    margin-bottom: 0; /* Remove a margem do último item */
+.why-benefits-card .benefits-list li:last-child {
+    margin-bottom: 0;
 }
-.benefits-list li::before {
+.why-benefits-card .benefits-list li::before {
     content: '';
     position: absolute;
     left: 0;
     top: 50%;
     transform: translateY(-50%);
-    width: 28px;
-    height: 28px;
-    /* SVG do checkmark verde (cor --primary-color) */
+    width: 24px; /* Ajuste o tamanho se necessário */
+    height: 24px;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2328D8A3' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'%3E%3C/path%3E%3C/svg%3E");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
 }
-
-/* Estilo para o botão na seção de benefícios */
-.benefits-cta {
-    margin-top: 2.5rem; /* Espaçamento acima do botão */
+/* Botão centralizado abaixo do grid */
+.why-benefits-cta {
+    text-align: center;
+    margin-top: 3rem; /* Espaço acima do botão */
 }
-/* --- FIM DA SEÇÃO DE BENEFÍCIOS --- */
+/* --- FIM DA NOVA SEÇÃO --- */
+
 
 /* Profitability Banner */
 .profitability-banner-section { padding: 60px 0; background-color:#071F3A; background-size: cover; background-position: right center; }
@@ -365,7 +346,7 @@ img { max-width: 100%; height: auto; display: block; }
     border-radius: 8px;
     padding: 2rem;
     flex: 1; /* Faz as duas colunas terem o mesmo tamanho */
-    min-height: 570px; /* AUMENTADA A ALTURA MÍNIMA para caber o novo card */
+    min-height: 450px; /* Altura mínima aumentada */
 }
 
 .simulator-inputs h3, .simulator-results h3 {
@@ -379,7 +360,6 @@ img { max-width: 100%; height: auto; display: block; }
 .simulator-inputs {
     display: flex;
     flex-direction: column; /* Revertido para column */
-    /* justify-content: center; Removido */
 }
 .simulator-inputs p { /* Estilo para o texto abaixo do label PRAZO */
     font-size: 0.9rem;
@@ -390,20 +370,27 @@ img { max-width: 100%; height: auto; display: block; }
 
 .form-inputs {
     display: flex;
-    flex-direction: column; /* Revertido para column */
+    flex-direction: column; /* Ajustado para Column */
     gap: 1.5rem;
     margin-bottom: 1.5rem;
 }
 .input-group { flex: 1; }
-.input-group.full-width { flex-basis: 100%; }
+.input-group.full-width { flex-basis: 100%; margin-top: 1.5rem; /* Espaço acima do Prazo */ }
 .input-group label { font-weight: 600; display: block; margin-bottom: 0.5rem; }
 .input-with-prefix { display: flex; border: 1px solid var(--border-color); border-radius: 4px; }
 .input-with-prefix span { padding: 10px; background-color: var(--light-gray-bg); }
 .input-with-prefix input { border: none; padding: 10px; width: 100%; font-size: 1rem; }
 
+/* Botões de Modalidade */
+.forma-options-group { display: flex; border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden; }
+.forma-btn { flex: 1; background-color: #fff; border: none; padding: 10px; cursor: pointer; font-weight: 600; transition: background-color 0.3s, color 0.3s; font-size: 0.9rem; font-family: inherit; }
+.forma-btn + .forma-btn { border-left: 1px solid var(--border-color); }
+.forma-btn.selected { background-color: #071F3A; color: white; }
+
+
 /* Botões de Tempo */
 .tempo-options-group { display: flex; border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden; }
-.tempo-btn { flex: 1; background-color: #fff; border: none; padding: 10px; cursor: pointer; font-weight: 600; transition: background-color 0.3s, color 0.3s; font-size: 0.9rem; }
+.tempo-btn { flex: 1; background-color: #fff; border: none; padding: 10px; cursor: pointer; font-weight: 600; transition: background-color 0.3s, color 0.3s; font-size: 0.9rem; font-family: inherit; }
 .tempo-btn + .tempo-btn { border-left: 1px solid var(--border-color); }
 .tempo-btn.selected { background-color: #071F3A; color: white; }
 
@@ -423,9 +410,7 @@ img { max-width: 100%; height: auto; display: block; }
     text-align: center;
     border-radius: 8px;
     margin-bottom: 1.5rem; /* Espaçamento entre os blocos de resultado */
-}
-.result-block:last-of-type {
-    margin-bottom: 1rem; /* Margem menor para o último bloco */
+    transition: display 0.3s ease; /* Transição suave para mostrar/esconder */
 }
 
 .result-block p {
@@ -442,6 +427,7 @@ img { max-width: 100%; height: auto; display: block; }
     text-align: center;
     margin-top: auto; /* Empurra a nota para o final do card */
     padding-top: 1rem;
+    transition: display 0.3s ease; /* Transição suave */
 }
 
 .simulator-cta { text-align: center; margin-top: 2.5rem; }
@@ -471,7 +457,7 @@ img { max-width: 100%; height: auto; display: block; }
     font-size: 2.2rem;
 }
 .faq-icon {
-    color: #FFFFFF; /* bRANCO para o ícone */
+    color: #FFFFFF; /* Dourado para o ícone */
 }
 .faq-subtitle {
     color: #f0f0f0; /* Subtítulo cinza claro */
@@ -540,7 +526,17 @@ img { max-width: 100%; height: auto; display: block; }
     .hero-content { text-align: left; max-width: 55%; }
     .hero-content p { margin-left: 0; margin-right: 0; }
     .hero-form-wrapper { margin: 0 0 0 2rem;}
-    .form-inputs { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
+
+    /* Inputs da Calculadora Lado a Lado em Telas Maiores */
+    .form-inputs {
+        flex-direction: row; /* Volta para linha em telas maiores */
+        flex-wrap: wrap;
+        align-items: flex-start;
+    }
+    .input-group.full-width {
+        margin-top: 0; /* Remove a margem extra */
+    }
+
 
     /* --- Media Query "Quem Organiza" --- */
     .about-main-content {
@@ -565,8 +561,13 @@ img { max-width: 100%; height: auto; display: block; }
     }
     /* --- FIM DA Media Query ECOSSISTEMA --- */
 
-    .why-invest-container { flex-direction: row; align-items: stretch; }
-    .history-card, .accordion-card { width: 50%; }
+     /* --- Media Query WHY & BENEFITS --- */
+    .why-benefits-grid {
+        flex-direction: row; /* Lado a lado no desktop */
+        align-items: stretch; /* Garante que os cards tenham a mesma altura */
+    }
+     /* --- Fim da Media Query --- */
+
     .banner-container { flex-direction: row; justify-content:space-around; align-items: center }
 
     /* Media query da calculadora */
@@ -605,8 +606,17 @@ img { max-width: 100%; height: auto; display: block; }
     }
     /* --- Fim da Media Query --- */
 
-    .history-card p { text-align: justify; }
-    .accordion-card p { text-align: justify; }
+    /* --- Media Query WHY & BENEFITS Mobile --- */
+    .why-benefits-card p {
+        text-align: justify; /* Justifica texto no mobile */
+    }
+    .why-benefits-card .benefits-list {
+        display: block; /* Ocupa largura total no mobile */
+        padding-left: 1rem; /* Pequeno recuo */
+    }
+     /* --- Fim da Media Query --- */
+
+    .accordion-card p { text-align: justify; } /* Manter se usar em outro lugar */
     /*.accordion-header { margin: 0.10rem 0;} Removido - Estilos do FAQ são mais específicos */
 
     /* Ajuste de altura da calculadora no mobile */
