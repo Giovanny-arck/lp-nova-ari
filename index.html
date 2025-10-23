@@ -6,8 +6,7 @@
     <title>ARI - Ativo de Renda Imobiliária</title>
     <meta name="description" content="Participe do Ativo de Renda Imobiliária (ARI) e conquiste retornos de até 3% ao mês livre de imposto de renda no litoral de Santa Catarina.">
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
-    <script>
+    <link rel="icon" href="img/favicon-ari.webp" type="image/webp"> <script>
 !function(f,b,e,v,n,t,s)
 {if(f.bq)return;n=f.bq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -68,21 +67,26 @@ src="https://www.facebook.com/tr?id=1959343334887899&ev=PageView&noscript=1"
                 <div class="simulator-header">
                     <h2>Calculadora de Investimentos</h2>
                     <p>Simule quanto seu dinheiro valoriza com o ARI - Ativo de Renda Imobiliária.</p>
-                    <small>*Simulação projetada em remuneração de até 3% a.m.*</small>
                 </div>
                 
                 <div class="simulator-container">
                     <div class="simulator-inputs">
                         <h3>Dados de investimento</h3>
                         <form id="calculator-form">
-                            <div class="form-inputs">
-                                <div class="input-group">
+                            <div class="form-inputs"> <div class="input-group">
                                     <label for="valor-aplicado">VALOR APLICADO</label>
                                     <div class="input-with-prefix">
                                         <span>R$</span>
                                         <input type="text" id="valor-aplicado" placeholder="50.000" inputmode="numeric">
                                     </div>
                                     <div id="valor-error" class="error-message">O valor mínimo é R$ 50.000</div>
+                                </div>
+                                <div class="input-group">
+                                    <label>MODALIDADE</label>
+                                    <div id="forma-options" class="forma-options-group">
+                                        <button type="button" class="forma-btn selected" data-forma="final">Rendimento no Final</button>
+                                        <button type="button" class="forma-btn" data-forma="mensal">Rendimento Mensal</button>
+                                    </div>
                                 </div>
                             </div>
                              <div class="input-group full-width">
@@ -100,18 +104,14 @@ src="https://www.facebook.com/tr?id=1959343334887899&ev=PageView&noscript=1"
                     <div class="simulator-results">
                         <h3>Projeção de Retorno</h3>
                         
-                        <div class="result-block">
-                            <p id="result-label-mensal">Rendimento mensal:</p>
+                        <div class="result-block" id="result-block-mensal" style="display: none;"> <p id="result-label-mensal">Rendimento mensal:</p>
                             <strong id="result-value-mensal">R$ 0,00</strong>
                         </div>
                         
-                        <div class="result-block">
-                            <p id="valle-result-label">Valorização total no final (Juros):</p>
-                            <strong id="valle-result">R$ 0,00</strong>
+                        <div class="result-block" id="result-block-juros-total" style="display: none;"> <p id="result-label-juros-total">Valor total no período:</p> <strong id="result-value-juros-total">R$ 0,00</strong>
                         </div>
 
-                        <div class="result-block">
-                            <p id="result-label-total-final">Valor total ao final (Valor Aplicado + Juros):</p>
+                        <div class="result-block" id="result-block-total-final"> <p id="result-label-total-final">Valor total ao final (Valor Aplicado + Juros):</p>
                             <strong id="result-value-total-final">R$ 0,00</strong>
                         </div>
                     </div>
@@ -121,34 +121,7 @@ src="https://www.facebook.com/tr?id=1959343334887899&ev=PageView&noscript=1"
                  <a href="#hero" class="btn btn-primary">QUERO INICIAR OS INVESTIMENTO</a>
             </div>
         </section>
-
-        <section id="about" class="about-section">
-            <div class="container">
-                <h2 class="about-title-main">Quem organiza o ARI - Ativo de Renda Imobiliária?</h2>
-                
-                <div class="about-main-content">
-                    <div class="about-image">
-                        <img src="/img/Fabricio.webp" alt="Fabrício Pavesi Junior">
-                    </div>
-                    <div class="about-text">
-                        <h3>Fabrício Pavesi Junior</h3>
-                        <p>Hoje é diretor comercial de várias empresas no segmento imobiliário como a imobiliária Futurus, a incorporadora Harpaluus e a ARCK1PRO, onde gere uma equipe de mais de 20 profissionais entre eles, arquitetos, engenheiros, advogados e corretores que juntos inserem incorporadoras no mercado do litoral catarinense, com excelência e resultados.</p>
-                    </div>
-                </div>
-
-                <ul class="about-details-grid">
-                    <li>20 anos de atuação no segmento de Construção Civil.</li>
-                    <li>+300 Empreendimentos imobiliários desenvolvidos.<br>Arquiteto e Urbanista - CAU/SC 167832-9</li>
-                    <li>Pós-Graduado em arquitetura de luxo.</li>
-                    <li>Pós-Graduado em incorporação imobiliária.</li>
-                    <li>Especialista em estruturação de novos negócios no Litoral Catarinense.</li>
-                    <li>Pós - Graduado em viabilidade de empreendimentos.</li>
-                </ul>
-            </div>
-            <div class="simulator-cta">
-                 <a href="#hero" class="btn btn-primary">INICIAR INVESTIMENTO AGORA</a>
-            </div>
-        </section>
+        
         <section id="ecosystem" class="ecosystem-section">
             <div class="container">
                 <h2 class="ecosystem-title">Ecossistema Empresarial ARCK1PRO</h2>
@@ -208,53 +181,30 @@ src="https://www.facebook.com/tr?id=1959343334887899&ev=PageView&noscript=1"
             </div>
         </section>
 
-        <section id="profitability-banner" class="profitability-banner-section">
-            <div class="container banner-container">
-                <h3>Invista no ARI - Ativo de Renda Imobiliária e tenha retornos de até 3% ao mês livre de imposto de renda.</h3>
-                <a href="#hero" class="btn btn-secondary">QUERO SABER MAIS</a>
-            </div>
-        </section>
-
-        <section id="why-invest" class="why-invest-section">
-            <div class="container why-invest-container">
-                <div class="history-card">
-                    <p>O ARI – Ativo de Renda Imobiliária nasceu do nosso compromisso em democratizar o acesso a investimentos imobiliários de alto rendimento. Percebemos que muitos investidores desejam entrar nesse mercado promissor, mas se sentem intimidados pela complexidade ou pela percepção de que é preciso um capital milionário.</p>
-                    <P>Nosso objetivo é permitir que você, investidor, tenha acesso as oportunidades reais e multiplique seu patrimônio de forma acessível e segura, com a possibilidade de também gerar rendimentos mensais. O ARI é a nossa forma de abrir as portas para que mais pessoas construam um futuro financeiro sólido através do investimento imobiliário inteligente no litoral catarinense.</P>
-                </div>
-                <div class="accordion-card">
-                    <h3>Por que investir no ARI - Ativo de Renda Imobiliária ?</h3>
-                    <p>Se você pensa que só é possível investir em imóveis com milhões ou que os investimentos tradicionais não rendem bem, ARI é para você.</p>
-                    <div class="accordion">
-                        <div class="accordion-item active">
-                            <button class="accordion-header" aria-expanded="true">Investir no setor imobiliário</button>
-                            <div class="accordion-content"><p>Se você quer investir e alcançar seus objetivos financeiros, mas está receoso ou acredita que o mercado imobiliário é para poucos, ARI é perfeito para você. Iremos te guiar passo a passo para acessar oportunidades lucrativas no Litoral Catarinense.</p></div>
-                        </div>
-                        <div class="accordion-item">
-                            <button class="accordion-header" aria-expanded="false">Diversifique sua carteira</button>
-                            <div class="accordion-content"><p>Diversifique seu portfólio no aquecido setor imobiliário do Litoral Catarinense de forma inteligente e flexível.</p></div>
-                        </div>
+        <section id="why-benefits-section" class="why-benefits-section">
+            <div class="container">
+                <div class="why-benefits-grid">
+                    <div class="why-benefits-card">
+                        <h2 class="why-benefits-title">Por que realizamos o ARI - Ativo de Renda Imobiliária?</h2> 
+                        <p>O ARI – Ativo de Renda Imobiliária nasceu do nosso compromisso em democratizar o acesso a investimentos imobiliários de alto rendimento. Percebemos que muitos investidores desejam entrar nesse mercado promissor, mas se sentem intimidados pela complexidade ou pela percepção de que é preciso um capital milionário.</p>
+                        <p>Nosso objetivo é permitir que você, investidor, tenha acesso as oportunidades reais e multiplique seu patrimônio de forma acessível e segura, com a possibilidade de também gerar rendimentos mensais. O ARI é a nossa forma de abrir as portas para que mais pessoas construam um futuro financeiro sólido através do investimento imobiliário inteligente no litoral catarinense.</p>
                     </div>
-                    <a href="#hero" class="btn btn-primary cta-button">QUERO CONHECER O ARI</a>
+                    <div class="why-benefits-card">
+                        <h2 class="why-benefits-title">Beneficios de investir no ARI - Ativo de Renda Imobiliária</h2>
+                        <ul class="benefits-list"> <li>Segurança</li>
+                            <li>Previsibilidade</li>
+                            <li>Maior taxa de retorno</li>
+                            <li>Rendimento mensal</li>
+                            <li>Livre de imposto de renda</li>
+                            <li>Aportes a partir de R$ 50 mil</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="why-benefits-cta">
+                    <a href="#hero" class="btn btn-primary">QUERO CONHECER O ARI</a>
                 </div>
             </div>
         </section>
-
-        <section id="benefits" class="benefits-section">
-            <div class="container benefits-container">
-                <h2>Beneficios de investir no ARI - Ativo de Renda Imobiliária</h2>
-                <ul class="benefits-list">
-                    <li>Segurança</li>
-                    <li>Previsibilidade</li>
-                    <li>Maior taxa de retorno</li>
-                    <li>Rendimento mensal</li>
-                    <li>Livre de imposto de renda</li>
-                    <li>Aportes a partir de R$ 50 mil</li>
-                </ul>
-                <br>
-                <a href="#hero" class="btn btn-primary benefits-cta">QUERO INVESTIR NO ARI</a>
-            </div>
-        </section>
-
         <section id="faq" class="faq-section">
             <div class="container faq-container">
                 <div class="faq-header-wrapper">
@@ -287,7 +237,7 @@ src="https://www.facebook.com/tr?id=1959343334887899&ev=PageView&noscript=1"
                            Preciso comprar ou administrar imóveis para investir?
                         </button>
                         <div class="accordion-content">
-                            <p>Não. O ARI não envolve compra, venda ou administração direta de imóveis. Você investe no ativo e já pode começar a gerar rendimentos.</p>
+                            <p>Não. O ARI não envolve compra, venda ou administração direta de imóveis. Você investe em uma incorporação e já pode começar a gerar rendimentos.</p>
                         </div>
                     </div>
                      <div class="accordion-item">
@@ -303,16 +253,15 @@ src="https://www.facebook.com/tr?id=1959343334887899&ev=PageView&noscript=1"
                     </div>
                     <div class="accordion-item">
                         <button class="accordion-header" aria-expanded="false">
-                           O ARI é exclusivo para investidores ricos?
+                           O ARI é exclusivo para investidores qualificados?
                         </button>
                         <div class="accordion-content">
-                            <p>Não. O ARI foi criado justamente para tornar o investimento acessível, permitindo aportes a partir de R$ 50 mil. É voltado a diferentes perfis de investidores.</p>
+                            <p>Não. O ARI foi criado justamente para tornar o investimento acessível, permitindo aportes a partir de R$ 50 mil.</p>
                         </div>
                     </div>
                 </div>
                 </div>
-                <div class="simulator-cta">
-                 <a href="#hero" class="btn btn-primary">QUERO COMEÇAR A INVESTIR</a>
+                <div class="simulator-cta"> <a href="#hero" class="btn btn-primary">QUERO COMEÇAR A INVESTIR</a>
             </div>
         </section>
         </main>
