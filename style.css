@@ -524,6 +524,32 @@ img { max-width: 100%; height: auto; display: block; }
 /* Footer */
 .main-footer { background-color: var(--dark-green); color: white; padding: 2rem 0; text-align: center; }
 
+
+/* --- (NOVO) ESTILOS PARA intl-tel-input --- */
+.contact-form .iti {
+    width: 100%;
+    margin-bottom: 1rem; /* Move a margem do input para este container */
+}
+
+/* O input de telefone dentro da biblioteca */
+.contact-form #telefone.iti__tel-input {
+    width: 100%;
+    margin-bottom: 0; /* Remove a margem original, pois .iti já tem */
+    /* Garante que o padding vertical seja o mesmo dos outros inputs */
+    padding-top: 12px; 
+    padding-bottom: 12px;
+    /* O padding-left é controlado pela biblioteca, mas garantimos a altura */
+    height: auto; 
+}
+
+/* Garante que o dropdown de países não seja muito largo */
+.iti__country-list {
+    width: 300px; /* Limita a largura do dropdown */
+    z-index: 20; /* Garante que o dropdown apareça sobre outros elementos */
+}
+/* --- FIM DOS ESTILOS intl-tel-input --- */
+
+
 /* Media Queries */
 @media (min-width: 768px) {
     .hero-container { align-items: center; flex-direction: row; justify-content: space-between; text-align: left; }
