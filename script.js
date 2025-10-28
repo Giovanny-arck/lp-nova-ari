@@ -44,6 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return 'evt_' + Date.now() + '_' + Math.floor(Math.random() * 1000000);
     }
 
+    // ---
+    // --- FUNÇÃO DE SUBMISSÃO MODIFICADA COM A LÓGICA 409
+    // ---
     async function handleFormSubmit(event) {
         event.preventDefault();
         const formStatus = document.getElementById('form-status');
@@ -68,7 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = Object.fromEntries(formData.entries());
 
         // --- FORMATAÇÃO DO TELEFONE ---
-        // Pega o número internacional completo (ex: +554799999999)
         const formattedPhone = iti ? iti.getNumber() : data.whatsapp; 
         // --- FIM DA FORMATAÇÃO ---
 
@@ -86,50 +88,65 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const [result1, result2] = await Promise.allSettled([
-                fetch(WEBHOOK_URL_1, requestOptions),
-                fetch(WEBHOOK_URL_2, requestOptions)
-            ]);
+            // 1. Tenta enviar para o webhook principal (que valida duplicados)
+            const response1 = await fetch(WEBHOOK_URL_1, requestOptions);
 
-            const isSuccess = (result1.status === 'fulfilled' && result1.value.ok) ||
-                              (result2.status === 'fulfilled' && result2.value.ok);
-
-            if (isSuccess) {
-                formStatus.textContent = 'Dados enviados com sucesso! Redirecionando...'; // MENSAGEM ATUALIZADA
-                formStatus.className = 'success';
-                contactForm.reset();
-
-                // --- DISPARO DO PIXEL DA META ---
-                if (typeof fbq === 'function') {
-                    // Evento Lead
-                    fbq('track', 'Lead', {
-                        name: data.nome || '',
-                        email: data.email || '',
-                        phone: formattedPhone || '', // Envia o número formatado
-                        utm_source: payload.utms.utm_source || ''
-                    });
-                    console.log("Evento Meta Pixel 'Lead' disparado");
-
-                    // Evento CompleteRegistration com eventID
-                    const eventId = generateEventId();
-                    fbq('track', 'CompleteRegistration', {}, { eventID: eventId });
-                    console.log("Evento Meta Pixel 'CompleteRegistration' disparado com eventID:", eventId);
-                }
-
-                // --- REDIRECIONAMENTO PARA PÁGINA DE OBRIGADO ---
-                setTimeout(() => {
-                    window.location.href = 'obrigado.html';
-                }, 1000); // Delay de 1 segundo para o usuário ler a mensagem e o pixel disparar
-
-            } else {
-                throw new Error('Falha no envio para ambos os webhooks.');
+            // 2. Analisa a resposta do webhook principal
+            if (response1.status === 409) { 
+                // Se seu n8n retornar 409 (Conflict), o JS vai pegar
+                formStatus.textContent = 'Você já se cadastrou. Em breve nossa equipe entrará em contato.';
+                formStatus.className = 'error'; // Usamos 'error' para a mensagem, mas não é um erro técnico
+                return; // Para a execução aqui
             }
+            
+            if (!response1.ok) {
+                // Se for qualquer outro erro (500, 404, etc.)
+                throw new Error('Erro na primeira validação do formulário.');
+            }
+
+            // 3. Se response1 foi OK (status 200), o lead era novo.
+            // Agora, envia para o RD Mkt
+            const response2 = await fetch(WEBHOOK_URL_2, requestOptions);
+            
+            if (!response2.ok) {
+                // Mesmo que o RD falhe, o lead principal foi salvo.
+                console.warn('Lead salvo, mas falha ao enviar para RD Mkt.');
+            }
+            
+            // 4. Sucesso. Dispara o Pixel e redireciona.
+            formStatus.textContent = 'Dados enviados com sucesso! Redirecionando...';
+            formStatus.className = 'success';
+            contactForm.reset();
+
+            // --- DISPARO DO PIXEL DA META ---
+            if (typeof fbq === 'function') {
+                // Evento Lead
+                fbq('track', 'Lead', {
+                    name: data.nome || '',
+                    email: data.email || '',
+                    phone: formattedPhone || '', // Envia o número formatado
+                    utm_source: payload.utms.utm_source || ''
+                });
+                console.log("Evento Meta Pixel 'Lead' disparado");
+
+                // Evento CompleteRegistration com eventID
+                const eventId = generateEventId();
+                fbq('track', 'CompleteRegistration', {}, { eventID: eventId });
+                console.log("Evento Meta Pixel 'CompleteRegistration' disparado com eventID:", eventId);
+            }
+
+            // --- REDIRECIONAMENTO PARA PÁGINA DE OBRIGADO ---
+            setTimeout(() => {
+                window.location.href = 'obrigado.html';
+            }, 1000); // Delay de 1 segundo para o usuário ler a mensagem e o pixel disparar
+
         } catch (error) {
             console.error('Erro ao enviar formulário:', error);
             formStatus.textContent = 'Erro ao enviar. Tente novamente.';
             formStatus.className = 'error';
         } finally {
-            // Não reabilita o botão se o envio foi sucesso (pois vai redirecionar)
+            // Isso roda sempre: seja sucesso, erro 409 ou outro erro
+            // Só reabilita o botão se NÃO for sucesso
             if (formStatus.className !== 'success') {
                 submitButton.disabled = false;
                 submitButton.textContent = 'QUERO ME REGISTRAR';
