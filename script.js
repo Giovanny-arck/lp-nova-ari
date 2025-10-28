@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // 2. Analisa a resposta do webhook principal
             if (response1.status === 409) { 
                 // Se seu n8n retornar 409 (Conflict), o JS vai pegar
-                formStatus.textContent = 'Você já se cadastrou. Em breve nossa equipe entrará em contato.';
+                formStatus.textContent = 'Você já tem um cadastro conosco.';
                 formStatus.className = 'error'; // Usamos 'error' para a mensagem, mas não é um erro técnico
                 return; // Para a execução aqui
             }
