@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const payload = {
             ...data,
             whatsapp: formattedPhone, // Substitui o whatsapp original pelo formatado
-            utms: getUtmParams(),
+            ...getUtmParams(),
             submittedAt: new Date().toISOString()
         };
 
