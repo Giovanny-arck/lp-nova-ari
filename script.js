@@ -1,16 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- CONFIGURAÇÃO (IGUAL LP DUBAI) ---
+    /* ==========================================================================
+       PARTE 1: CONFIGURAÇÃO DO FORMULÁRIO E TELEFONE (PADRÃO DUBAI)
+       ========================================================================== */
+
     const WEBHOOK_URL_1 = 'https://n8nwebhook.arck1pro.shop/webhook/lp-lead-direto';
     const WEBHOOK_URL_2 = 'https://n8nwebhook.arck1pro.shop/webhook/lp-lead-direto-rdmkt';
 
-    // --- 1. INICIALIZAÇÃO DO TELEFONE ---
+    // --- Inicialização do Telefone ---
     const phoneInput = document.getElementById('telefone');
     let iti;
 
     if (phoneInput && window.intlTelInput) {
         iti = window.intlTelInput(phoneInput, {
-            // CORREÇÃO CRÍTICA: Aponta para o arquivo JS
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
             initialCountry: "auto",
             geoIpLookup: function(callback) {
@@ -20,23 +22,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     .catch(() => callback("br"));
             },
             preferredCountries: ['br', 'pt', 'us'],
-            separateDialCode: true // Opcional: Mostra o DDI separado (+55) visualmente
+            separateDialCode: true
         });
-    } else {
-        console.warn("Input #telefone não encontrado ou biblioteca não carregou.");
     }
 
-    // --- 2. LÓGICA DO FORMULÁRIO ---
+    // --- Lógica de Envio do Formulário ---
     const contactForm = document.getElementById('contact-form');
     
-    // Função UTMs
     function getUtmParams() {
         const params = new URLSearchParams(window.location.search);
         const utm = {};
         for (const [key, value] of params.entries()) {
-            if (key.startsWith('utm_')) {
-                utm[key] = value;
-            }
+            if (key.startsWith('utm_')) utm[key] = value;
         }
         return utm;
     }
@@ -44,33 +41,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (contactForm) {
         contactForm.addEventListener('submit', async (event) => {
             event.preventDefault();
-            
             const submitButton = contactForm.querySelector('button[type="submit"]');
             const formStatus = document.getElementById('form-status');
             
-            // Limpa mensagens anteriores
-            if (formStatus) {
-                formStatus.textContent = '';
-                formStatus.className = '';
-            }
+            if (formStatus) { formStatus.textContent = ''; formStatus.className = ''; }
 
-            // Validação do Telefone
+            // Validação Telefone
             if (iti && !iti.isValidNumber()) {
                 const msg = 'Por favor, insira um número de telefone válido.';
-                if (formStatus) {
-                    formStatus.textContent = msg;
-                    formStatus.className = 'form-status-error'; // Classe definida no CSS novo
-                } else {
-                    alert(msg);
-                }
+                if (formStatus) { formStatus.textContent = msg; formStatus.className = 'form-status-error'; }
+                else { alert(msg); }
                 return;
             }
 
-            // Trava botão
             submitButton.disabled = true;
             submitButton.textContent = 'ENVIANDO...';
 
-            // Prepara dados
             const urlParams = new URLSearchParams(window.location.search);
             const rawFormData = new FormData(contactForm);
             
@@ -78,34 +64,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 nome: rawFormData.get('nome'),
                 email: rawFormData.get('email'),
                 profissao: rawFormData.get('profissao'),
-                whatsapp: iti ? iti.getNumber() : rawFormData.get('whatsapp'), // Pega número completo (+55...)
+                whatsapp: iti ? iti.getNumber() : rawFormData.get('whatsapp'),
                 investe_atualmente: rawFormData.get('investe_atualmente'),
                 prazo_investimento: rawFormData.get('prazo_investimento'),
                 ciente_emprestimos: rawFormData.get('ciente_emprestimos'),
                 valor_investimento: rawFormData.get('valor_investimento'),
-                
                 utm_placement: urlParams.get('utm_placement') || '',
                 utm_id: urlParams.get('utm_id') || '',
                 ...getUtmParams()
             };
 
             try {
-                // Envio 1 (Principal)
+                // Webhook 1
                 const response1 = await fetch(WEBHOOK_URL_1, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
 
-                // Tratamento de Duplicidade (409)
                 if (response1.status === 409) {
                     const msg = 'Você já tem um cadastro conosco.';
-                    if (formStatus) {
-                        formStatus.textContent = msg;
-                        formStatus.className = 'form-status-error';
-                    } else {
-                        alert(msg);
-                    }
+                    if (formStatus) { formStatus.textContent = msg; formStatus.className = 'form-status-error'; }
+                    else { alert(msg); }
                     submitButton.disabled = false;
                     submitButton.textContent = 'QUERO ME REGISTRAR';
                     return;
@@ -113,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (!response1.ok) throw new Error(`Erro API: ${response1.status}`);
 
-                // Envio 2 (RD Station / Backup)
+                // Webhook 2
                 try {
                     await fetch(WEBHOOK_URL_2, {
                         method: 'POST',
@@ -123,39 +103,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 } catch (e) { console.warn('Erro secundário ignorado'); }
 
                 // Sucesso
-                if (formStatus) {
-                    formStatus.textContent = 'Sucesso! Redirecionando...';
-                    formStatus.className = 'form-status-success';
-                }
-                
+                if (formStatus) { formStatus.textContent = 'Sucesso! Redirecionando...'; formStatus.className = 'form-status-success'; }
                 if (typeof fbq === 'function') fbq('track', 'CompleteRegistration');
 
-                setTimeout(() => {
-                    window.location.href = 'obrigado.html';
-                }, 1000);
+                setTimeout(() => { window.location.href = 'obrigado.html'; }, 1000);
 
             } catch (error) {
                 console.error(error);
                 const msg = 'Erro ao enviar. Tente novamente.';
-                if (formStatus) {
-                    formStatus.textContent = msg;
-                    formStatus.className = 'form-status-error';
-                } else {
-                    alert(msg);
-                }
+                if (formStatus) { formStatus.textContent = msg; formStatus.className = 'form-status-error'; }
+                else { alert(msg); }
                 submitButton.disabled = false;
                 submitButton.textContent = 'QUERO ME REGISTRAR';
             }
         });
     }
-});
 
-    // --- LÓGICA DA CALCULADORA ---
+
+    /* ==========================================================================
+       PARTE 2: LÓGICA DA CALCULADORA (RESTAURADA DO ORIGINAL)
+       ========================================================================== */
+    
     const valorInput = document.getElementById('valor-aplicado');
     const tempoBtns = document.querySelectorAll('.tempo-btn');
     const formaBtns = document.querySelectorAll('.forma-btn');
     const valorError = document.getElementById('valor-error');
 
+    // Elementos de resultado
     const mensalResultBlock = document.getElementById('result-block-mensal');
     const mensalResultValue = document.getElementById('result-value-mensal');
     const jurosTotalResultBlock = document.getElementById('result-block-juros-total');
@@ -193,16 +167,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function calcularSimulacao() {
+        if (!valorInput) return; // Segurança caso o elemento não exista
         const valorStr = valorInput.value.replace(/\./g, '').replace(',', '.');
         const valor = parseFloat(valorStr) || 0;
 
+        // Validação Mínima
         if (valor > 0 && valor < valorMinimo) {
-            valorError.style.display = 'block';
+            if (valorError) valorError.style.display = 'block';
             resetarResultados();
             updateResultVisibility();
             return;
         } else {
-            valorError.style.display = 'none';
+            if (valorError) valorError.style.display = 'none';
         }
 
         if (valor < valorMinimo || mesesSelecionados === 0) {
@@ -226,41 +202,45 @@ document.addEventListener('DOMContentLoaded', () => {
         const resultadoFinalJuros = (valor * taxaTotalFinal) * mesesSelecionados;
         const resultadoTotalFinal = valor + resultadoFinalJuros;
 
-        mensalResultValue.textContent = formatarMoeda(resultadoMensal);
-        jurosTotalResultValue.textContent = formatarMoeda(resultadoTotalMensalPeriodo);
-        totalFinalResultValue.textContent = formatarMoeda(resultadoTotalFinal);
+        if (mensalResultValue) mensalResultValue.textContent = formatarMoeda(resultadoMensal);
+        if (jurosTotalResultValue) jurosTotalResultValue.textContent = formatarMoeda(resultadoTotalMensalPeriodo);
+        if (totalFinalResultValue) totalFinalResultValue.textContent = formatarMoeda(resultadoTotalFinal);
 
         updateResultVisibility();
     }
 
     function updateResultVisibility() {
         if (formaSelecionada === 'mensal') {
-            mensalResultBlock.style.display = 'block';
-            jurosTotalResultBlock.style.display = 'block';
-            jurosTotalResultLabel.textContent = 'Valor Total no Período:';
-            totalFinalResultBlock.style.display = 'none';
+            if (mensalResultBlock) mensalResultBlock.style.display = 'block';
+            if (jurosTotalResultBlock) jurosTotalResultBlock.style.display = 'block';
+            if (jurosTotalResultLabel) jurosTotalResultLabel.textContent = 'Valor Total no Período:';
+            if (totalFinalResultBlock) totalFinalResultBlock.style.display = 'none';
             if (noteFinal) noteFinal.style.display = 'none';
             if (noteMensal) noteMensal.style.display = 'block';
         } else {
-            mensalResultBlock.style.display = 'none';
-            jurosTotalResultBlock.style.display = 'none';
-            totalFinalResultBlock.style.display = 'block';
+            if (mensalResultBlock) mensalResultBlock.style.display = 'none';
+            if (jurosTotalResultBlock) jurosTotalResultBlock.style.display = 'none';
+            if (totalFinalResultBlock) totalFinalResultBlock.style.display = 'block';
             if (noteFinal) noteFinal.style.display = 'block';
             if (noteMensal) noteMensal.style.display = 'none';
         }
     }
 
     function resetarResultados() {
-        mensalResultValue.textContent = 'R$ 0,00';
-        jurosTotalResultValue.textContent = 'R$ 0,00';
-        totalFinalResultValue.textContent = 'R$ 0,00';
+        if (mensalResultValue) mensalResultValue.textContent = 'R$ 0,00';
+        if (jurosTotalResultValue) jurosTotalResultValue.textContent = 'R$ 0,00';
+        if (totalFinalResultValue) totalFinalResultValue.textContent = 'R$ 0,00';
     }
 
-    valorInput.addEventListener('input', (e) => {
-        let value = e.target.value.replace(/\D/g, '');
-        e.target.value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-        calcularSimulacao();
-    });
+    // Event Listeners da Calculadora
+    if (valorInput) {
+        valorInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            // Formatação visual (Máscara 50.000)
+            e.target.value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+            calcularSimulacao();
+        });
+    }
 
     formaBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -280,28 +260,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- LÓGICA DO ACORDEÃO (FAQ) ---
+    // Lógica do Acordeão (FAQ) - Restaurada também
     const accordions = document.querySelectorAll('.accordion');
     accordions.forEach(accordion => {
         const items = accordion.querySelectorAll('.accordion-item');
         items.forEach(item => {
             const header = item.querySelector('.accordion-header');
-            header.addEventListener('click', () => {
-                const isActive = item.classList.contains('active');
-                const parentAccordion = header.closest('.accordion');
-                parentAccordion.querySelectorAll('.accordion-item').forEach(otherItem => {
-                    if (otherItem !== item || isActive) {
-                       otherItem.classList.remove('active');
-                       otherItem.querySelector('.accordion-header').setAttribute('aria-expanded', 'false');
+            if(header){
+                header.addEventListener('click', () => {
+                    const isActive = item.classList.contains('active');
+                    const parentAccordion = header.closest('.accordion');
+                    parentAccordion.querySelectorAll('.accordion-item').forEach(otherItem => {
+                        if (otherItem !== item || isActive) {
+                        otherItem.classList.remove('active');
+                        const otherHeader = otherItem.querySelector('.accordion-header');
+                        if(otherHeader) otherHeader.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+                    if (!isActive) {
+                        item.classList.add('active');
+                        header.setAttribute('aria-expanded', 'true');
                     }
                 });
-                if (!isActive) {
-                    item.classList.add('active');
-                    header.setAttribute('aria-expanded', 'true');
-                }
-            });
+            }
         });
     });
 
+    // Inicializa
     updateResultVisibility();
 });
