@@ -1,23 +1,29 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- URLs DOS WEBHOOKS (PADRÃO REFERENCE) ---
+    // --- URLs DOS WEBHOOKS ---
     const WEBHOOK_URL_1 = 'https://n8nwebhook.arck1pro.shop/webhook/lp-lead-direto';
     const WEBHOOK_URL_2 = 'https://n8nwebhook.arck1pro.shop/webhook/lp-lead-direto-rdmkt';
 
-    // --- INICIALIZAÇÃO DO TELEFONE ---
+    // --- INICIALIZAÇÃO DO TELEFONE (CORRIGIDO) ---
     const phoneInput = document.getElementById('telefone');
     let iti;
-    if (phoneInput) {
+
+    // Verificação de segurança se a biblioteca carregou
+    if (window.intlTelInput && phoneInput) {
         iti = window.intlTelInput(phoneInput, {
-            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css",
+            // CORREÇÃO: Aqui deve ser o arquivo .js e não .css
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
             initialCountry: "auto",
-            geoIpLookup: function(success, failure) {
+            geoIpLookup: function(callback) {
                 fetch("https://ipapi.co/json")
                     .then(res => res.json())
-                    .then(data => success(data.country_code))
-                    .catch(() => success("br"));
+                    .then(data => callback(data.country_code))
+                    .catch(() => callback("br"));
             },
+            preferredCountries: ['br', 'pt', 'us']
         });
+    } else {
+        console.warn("Biblioteca intl-tel-input não carregada ou input #telefone não encontrado.");
     }
 
     const contactForm = document.getElementById('contact-form');
@@ -42,8 +48,14 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (formStatus) formStatus.textContent = '';
             
+            // Validação do telefone
             if (iti && !iti.isValidNumber()) {
-                alert('Por favor, insira um número de telefone válido.');
+                if (formStatus) {
+                    formStatus.textContent = 'Por favor, insira um número de telefone válido.';
+                    formStatus.className = 'error'; // Garanta que tem css para .error se quiser cor vermelha
+                } else {
+                    alert('Por favor, insira um número de telefone válido.');
+                }
                 return;
             }
 
@@ -53,12 +65,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const rawFormData = new FormData(contactForm);
             
-            // Monta o objeto payload igual à referência
+            // Monta o payload
             const payload = {
                 nome: rawFormData.get('nome'),
                 email: rawFormData.get('email'),
                 profissao: rawFormData.get('profissao'),
-                whatsapp: iti ? iti.getNumber() : rawFormData.get('whatsapp'),
+                whatsapp: iti ? iti.getNumber() : rawFormData.get('whatsapp'), // Pega número formatado
                 investe_atualmente: rawFormData.get('investe_atualmente'),
                 prazo_investimento: rawFormData.get('prazo_investimento'),
                 ciente_emprestimos: rawFormData.get('ciente_emprestimos'),
@@ -79,7 +91,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (response1.status === 409) {
-                    alert('Você já tem um cadastro conosco.'); // Alerta padrão referência
+                    const msg = 'Você já tem um cadastro conosco.';
+                    if (formStatus) {
+                        formStatus.textContent = msg;
+                        formStatus.className = 'error';
+                    } else {
+                        alert(msg);
+                    }
                     submitButton.disabled = false;
                     submitButton.textContent = 'QUERO ME REGISTRAR';
                     return;
@@ -99,22 +117,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 } catch (e) { console.warn('Erro secundário ignorado', e); }
 
                 // 3. Sucesso e Redirect
+                if (formStatus) {
+                    formStatus.textContent = 'Sucesso! Redirecionando...';
+                    formStatus.className = 'success';
+                }
+
                 if (typeof fbq === 'function') {
                     fbq('track', 'CompleteRegistration');
                 }
 
-                window.location.href = 'obrigado.html';
+                setTimeout(() => {
+                    window.location.href = 'obrigado.html';
+                }, 1000);
 
             } catch (error) {
                 console.error(error);
-                alert('Ocorreu um erro ao enviar o cadastro. Tente novamente.');
+                const msg = 'Ocorreu um erro ao enviar o cadastro. Tente novamente.';
+                if (formStatus) {
+                    formStatus.textContent = msg;
+                    formStatus.className = 'error';
+                } else {
+                    alert(msg);
+                }
                 submitButton.disabled = false;
                 submitButton.textContent = 'QUERO ME REGISTRAR';
             }
         });
     }
     
-    // ... (Mantenha o código da calculadora aqui embaixo se houver) ...
+    // ... Código da calculadora (se houver) continua abaixo ...
 });
 
     // --- LÓGICA DA CALCULADORA ---
