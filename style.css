@@ -688,3 +688,14 @@ img { max-width: 100%; height: auto; display: block; }
     line-height: 1.5; /* Espaçamento entre linhas */
 }
 /* --- FIM DO NOVO ESTILO --- */
+
+/* Adicione ao final do style.css */
+.iti {
+    width: 100%;
+    margin-bottom: 15px; /* Espaço para não grudar no próximo input */
+}
+
+.iti__country-list {
+    z-index: 99999 !important; /* Força ficar na frente de tudo */
+    white-space: nowrap;
+}
