@@ -688,39 +688,3 @@ img { max-width: 100%; height: auto; display: block; }
     line-height: 1.5; /* Espaçamento entre linhas */
 }
 /* --- FIM DO NOVO ESTILO --- */
-
-/* --- CORREÇÃO DO CAMPO DE TELEFONE (INTL-TEL-INPUT) --- */
-.iti {
-    width: 100%;
-    display: block;
-    margin-bottom: 1rem; /* Espaçamento igual aos outros inputs */
-}
-
-/* Garante que o input dentro da lib ocupe o espaço todo */
-.iti input {
-    width: 100% !important;
-    padding-left: 50px !important; /* Espaço para a bandeira não ficar em cima do texto */
-}
-
-/* Força a lista de países a ficar no topo e legível */
-.iti__country-list {
-    z-index: 999999 !important;
-    white-space: nowrap;
-    background-color: white;
-    color: #333; /* Texto escuro para leitura */
-    max-width: 300px; /* Evita que estoure a tela em mobile */
-}
-
-/* Feedback de erro/sucesso (Opcional, mas útil) */
-.form-status-error {
-    color: #ff4d4d;
-    font-size: 0.9rem;
-    margin-top: 5px;
-    display: block;
-}
-.form-status-success {
-    color: #28a745;
-    font-size: 0.9rem;
-    margin-top: 5px;
-    display: block;
-}
