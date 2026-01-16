@@ -1,34 +1,38 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- URLs DOS WEBHOOKS ---
+    // 1. Configuração dos Webhooks
     const WEBHOOK_URL_1 = 'https://n8nwebhook.arck1pro.shop/webhook/lp-lead-direto';
     const WEBHOOK_URL_2 = 'https://n8nwebhook.arck1pro.shop/webhook/lp-lead-direto-rdmkt';
 
-    // --- INICIALIZAÇÃO DO TELEFONE (CORRIGIDO) ---
+    // 2. Inicialização do Telefone
     const phoneInput = document.getElementById('telefone');
     let iti;
 
-    // Verificação de segurança se a biblioteca carregou
-    if (window.intlTelInput && phoneInput) {
-        iti = window.intlTelInput(phoneInput, {
-            // CORREÇÃO: Aqui deve ser o arquivo .js e não .css
-            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-            initialCountry: "auto",
-            geoIpLookup: function(callback) {
-                fetch("https://ipapi.co/json")
-                    .then(res => res.json())
-                    .then(data => callback(data.country_code))
-                    .catch(() => callback("br"));
-            },
-            preferredCountries: ['br', 'pt', 'us']
-        });
-    } else {
-        console.warn("Biblioteca intl-tel-input não carregada ou input #telefone não encontrado.");
+    try {
+        if (window.intlTelInput && phoneInput) {
+            iti = window.intlTelInput(phoneInput, {
+                // IMPORTANTE: Este link deve terminar em .js
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+                initialCountry: "auto",
+                geoIpLookup: function(callback) {
+                    fetch("https://ipapi.co/json")
+                        .then(res => res.json())
+                        .then(data => callback(data.country_code))
+                        .catch(() => callback("br"));
+                },
+                preferredCountries: ['br', 'pt', 'us']
+            });
+            console.log("Telefone inicializado com sucesso!");
+        } else {
+            console.error("ERRO: Input '#telefone' não encontrado ou biblioteca intlTelInput não carregada.");
+        }
+    } catch (err) {
+        console.error("Erro fatal ao iniciar telefone:", err);
     }
 
+    // 3. Formulário
     const contactForm = document.getElementById('contact-form');
     
-    // --- FUNÇÃO DE CAPTURA DE UTMs ---
     function getUtmParams() {
         const params = new URLSearchParams(window.location.search);
         const utm = {};
@@ -46,15 +50,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const submitButton = contactForm.querySelector('button[type="submit"]');
             const formStatus = document.getElementById('form-status');
             
-            if (formStatus) formStatus.textContent = '';
+            if (formStatus) {
+                formStatus.textContent = '';
+                formStatus.className = '';
+            }
             
-            // Validação do telefone
+            // Validação
             if (iti && !iti.isValidNumber()) {
+                const msg = 'Por favor, insira um número de telefone válido (ex: 47999998888).';
                 if (formStatus) {
-                    formStatus.textContent = 'Por favor, insira um número de telefone válido.';
-                    formStatus.className = 'error'; // Garanta que tem css para .error se quiser cor vermelha
+                    formStatus.textContent = msg;
+                    formStatus.className = 'error';
                 } else {
-                    alert('Por favor, insira um número de telefone válido.');
+                    alert(msg);
                 }
                 return;
             }
@@ -65,25 +73,24 @@ document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const rawFormData = new FormData(contactForm);
             
-            // Monta o payload
+            // Payload
             const payload = {
                 nome: rawFormData.get('nome'),
                 email: rawFormData.get('email'),
                 profissao: rawFormData.get('profissao'),
-                whatsapp: iti ? iti.getNumber() : rawFormData.get('whatsapp'), // Pega número formatado
+                whatsapp: iti ? iti.getNumber() : rawFormData.get('whatsapp'),
                 investe_atualmente: rawFormData.get('investe_atualmente'),
                 prazo_investimento: rawFormData.get('prazo_investimento'),
                 ciente_emprestimos: rawFormData.get('ciente_emprestimos'),
                 valor_investimento: rawFormData.get('valor_investimento'),
                 
-                // UTMs explícitas + Dinâmicas
                 utm_placement: urlParams.get('utm_placement') || '',
                 utm_id: urlParams.get('utm_id') || '',
                 ...getUtmParams()
             };
 
             try {
-                // 1. Envio Principal
+                // Envio 1
                 const response1 = await fetch(WEBHOOK_URL_1, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -103,28 +110,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                if (!response1.ok) {
-                    throw new Error(`Erro Webhook 1: ${response1.status}`);
-                }
+                if (!response1.ok) throw new Error(`Status: ${response1.status}`);
 
-                // 2. Envio Secundário (RD)
+                // Envio 2 (RD)
                 try {
                     await fetch(WEBHOOK_URL_2, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
-                } catch (e) { console.warn('Erro secundário ignorado', e); }
+                } catch (e) { console.warn('Ignorando erro secundário'); }
 
-                // 3. Sucesso e Redirect
+                // Sucesso
                 if (formStatus) {
                     formStatus.textContent = 'Sucesso! Redirecionando...';
                     formStatus.className = 'success';
                 }
-
-                if (typeof fbq === 'function') {
-                    fbq('track', 'CompleteRegistration');
-                }
+                
+                if (typeof fbq === 'function') fbq('track', 'CompleteRegistration');
 
                 setTimeout(() => {
                     window.location.href = 'obrigado.html';
@@ -132,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             } catch (error) {
                 console.error(error);
-                const msg = 'Ocorreu um erro ao enviar o cadastro. Tente novamente.';
+                const msg = 'Erro ao enviar. Tente novamente.';
                 if (formStatus) {
                     formStatus.textContent = msg;
                     formStatus.className = 'error';
@@ -144,8 +147,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
-    // ... Código da calculadora (se houver) continua abaixo ...
+
+    // (Código da calculadora deve ficar abaixo se houver)
 });
 
     // --- LÓGICA DA CALCULADORA ---
