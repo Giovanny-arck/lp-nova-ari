@@ -74,17 +74,41 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <p>Cadastre-se e receba as oportunidades.</p>
                         <input type="text" id="nome" name="nome" placeholder="Nome Completo" required>
                         <input type="email" id="email" name="email" placeholder="E-mail" required>
+                        <input type="text" id="profissao" name="profissao" placeholder="Profissão" required>
                         
                         <input type="tel" id="telefone" name="whatsapp" placeholder="Telefone" required>
                         
-                        <input type="text" id="profissao" name="profissao" placeholder="Profissão" required>
+                        <select id="investe-atualmente" name="investe_atualmente" required>
+                            <option value="" disabled selected>Você já investe em alguma modalidade?</option>
+                            <option value="Sim, invisto em imóveis">Sim, invisto em imóveis</option>
+                            <option value="Sim, invisto em renda fixa">Sim, invisto em renda fixa</option>
+                            <option value="Sim, invisto em fundos imobiliários">Sim, invisto em fundos imobiliários</option>
+                            <option value="Não invisto ainda">Não invisto ainda</option>
+                        </select>
+
+                        <select id="prazo-investimento" name="prazo_investimento" required>
+                            <option value="" disabled selected>Você está pronto para investir nos próximos:</option>
+                            <option value="15 dias">15 dias</option>
+                            <option value="30 dias">30 dias</option>
+                            <option value="60 dias">60 dias</option>
+                            <option value="Ainda estou avaliando">Ainda estou avaliando</option>
+                        </select>
+
+                        <select id="ciente-emprestimos" name="ciente_emprestimos" required>
+                            <option value="" disabled selected>Ciente de que não ofertamos empréstimos?</option>
+                            <option value="Sim">Sim</option>
+                            <option value="Não">Não</option>
+                        </select>
+
                         <select id="faixa-valor" name="valor_investimento" required>
                             <option value="" disabled selected>Faixa de Valor de Investimento</option>
-                            <option value="50k-100k">R$ 50.000 a R$ 100.000</option>
-                            <option value="100k-150k">R$ 100.000 a R$ 150.000</option>
-                            <option value="150k-200k">R$ 150.000 a R$ 200.000</option>
-                            <option value="200k+">Acima de R$ 200.000</option>
+                            <option value="50 mil">50 mil</option>
+                            <option value="50-99">De 50 mil a 99 mil</option>
+                            <option value="100-199">De 100 mil a 199 mil</option>
+                            <option value="200-399">De 200 mil a 399 mil</option>
+                            <option value="Acima de 400 mil">Acima de 400 mil</option>
                         </select>
+
                         <small>Ao preencher este formulário, autorizo que meus dados sejam utilizados para que a empresa entre em contato comigo por e-mail, telefone ou outros meios informados.</small>
                         <button type="submit" class="btn btn-primary">QUERO ME REGISTRAR</button>
                         <div id="form-status"></div>
