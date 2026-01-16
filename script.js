@@ -1,13 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- URLs DOS WEBHOOKS ---
+    // --- URLs DOS WEBHOOKS (PADRÃO REFERENCE) ---
     const WEBHOOK_URL_1 = 'https://n8nwebhook.arck1pro.shop/webhook/lp-lead-direto';
     const WEBHOOK_URL_2 = 'https://n8nwebhook.arck1pro.shop/webhook/lp-lead-direto-rdmkt';
 
-    // --- INICIALIZAÇÃO DO CAMPO DE TELEFONE INTERNACIONAL ---
+    // --- INICIALIZAÇÃO DO TELEFONE ---
     const phoneInput = document.getElementById('telefone');
     let iti;
-
     if (phoneInput) {
         iti = window.intlTelInput(phoneInput, {
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/19.2.16/js/utils.js",
@@ -18,16 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     .then(data => success(data.country_code))
                     .catch(() => success("br"));
             },
-            preferredCountries: ['br', 'pt', 'us']
         });
     }
 
-    // --- FORMULÁRIO DA HERO SECTION ---
     const contactForm = document.getElementById('contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', handleFormSubmit);
-    }
-
+    
+    // --- FUNÇÃO DE CAPTURA DE UTMs ---
     function getUtmParams() {
         const params = new URLSearchParams(window.location.search);
         const utm = {};
@@ -39,97 +34,88 @@ document.addEventListener('DOMContentLoaded', () => {
         return utm;
     }
 
-    // --- FUNÇÃO DE SUBMISSÃO CORRIGIDA E ROBUSTA ---
-    async function handleFormSubmit(event) {
-        event.preventDefault();
-        const formStatus = document.getElementById('form-status');
-        const submitButton = contactForm.querySelector('button[type="submit"]');
-        submitButton.disabled = true;
-        submitButton.textContent = 'ENVIANDO...';
-        formStatus.textContent = '';
-        formStatus.className = '';
-
-        // Validação do telefone
-        if (iti && !iti.isValidNumber()) {
-            formStatus.textContent = 'Por favor, insira um número de telefone válido.';
-            formStatus.className = 'error';
-            submitButton.disabled = false;
-            submitButton.textContent = 'QUERO ME REGISTRAR';
-            return;
-        }
-
-        const formData = new FormData(contactForm);
-        const data = Object.fromEntries(formData.entries());
-        const formattedPhone = iti ? iti.getNumber() : data.whatsapp;
-
-        // Monta o payload com as UTMs na raiz do objeto
-        const payload = {
-            ...data,
-            whatsapp: formattedPhone,
-            ...getUtmParams(),
-            submittedAt: new Date().toISOString()
-        };
-
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        };
-
-        try {
-            // 1. Envio Principal (N8N) - Crítico
-            const response1 = await fetch(WEBHOOK_URL_1, requestOptions);
-
-            if (response1.status === 409) {
-                formStatus.textContent = 'Você já tem um cadastro conosco.';
-                formStatus.className = 'error';
-                submitButton.disabled = false;
-                submitButton.textContent = 'QUERO ME REGISTRAR';
+    if (contactForm) {
+        contactForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            const formStatus = document.getElementById('form-status');
+            
+            if (formStatus) formStatus.textContent = '';
+            
+            if (iti && !iti.isValidNumber()) {
+                alert('Por favor, insira um número de telefone válido.');
                 return;
             }
 
-            if (!response1.ok) {
-                throw new Error(`Erro no Webhook Principal: ${response1.status}`);
-            }
+            submitButton.disabled = true;
+            submitButton.textContent = 'ENVIANDO...';
 
-            // 2. Envio Secundário (RD Mkt) - Isolado para não quebrar o fluxo
-            try {
-                await fetch(WEBHOOK_URL_2, requestOptions);
-            } catch (errorWebhook2) {
-                console.warn("Aviso: Segundo webhook não completou, mas seguindo fluxo de sucesso.", errorWebhook2);
-            }
-
-            // 3. Sucesso e Redirecionamento
-            formStatus.textContent = 'Cadastro realizado com sucesso! Redirecionando...';
-            formStatus.className = 'success';
-
-            // Disparo do Pixel
-            if (typeof fbq === 'function') {
-                // CORREÇÃO: Acessa payload.utm_source diretamente
-                fbq('track', 'Lead', {
-                    content_name: 'Cadastro LP ARI',
-                    name: data.nome || '',
-                    email: data.email || '',
-                    phone: formattedPhone || '',
-                    utm_source: payload.utm_source || ''
-                });
+            const urlParams = new URLSearchParams(window.location.search);
+            const rawFormData = new FormData(contactForm);
+            
+            // Monta o objeto payload igual à referência
+            const payload = {
+                nome: rawFormData.get('nome'),
+                email: rawFormData.get('email'),
+                profissao: rawFormData.get('profissao'),
+                whatsapp: iti ? iti.getNumber() : rawFormData.get('whatsapp'),
+                investe_atualmente: rawFormData.get('investe_atualmente'),
+                prazo_investimento: rawFormData.get('prazo_investimento'),
+                ciente_emprestimos: rawFormData.get('ciente_emprestimos'),
+                valor_investimento: rawFormData.get('valor_investimento'),
                 
-                const eventId = 'evt_' + Date.now() + '_' + Math.floor(Math.random() * 1000000);
-                fbq('track', 'CompleteRegistration', {}, { eventID: eventId });
-            }
+                // UTMs explícitas + Dinâmicas
+                utm_placement: urlParams.get('utm_placement') || '',
+                utm_id: urlParams.get('utm_id') || '',
+                ...getUtmParams()
+            };
 
-            setTimeout(() => {
+            try {
+                // 1. Envio Principal
+                const response1 = await fetch(WEBHOOK_URL_1, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response1.status === 409) {
+                    alert('Você já tem um cadastro conosco.'); // Alerta padrão referência
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'QUERO ME REGISTRAR';
+                    return;
+                }
+
+                if (!response1.ok) {
+                    throw new Error(`Erro Webhook 1: ${response1.status}`);
+                }
+
+                // 2. Envio Secundário (RD)
+                try {
+                    await fetch(WEBHOOK_URL_2, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                } catch (e) { console.warn('Erro secundário ignorado', e); }
+
+                // 3. Sucesso e Redirect
+                if (typeof fbq === 'function') {
+                    fbq('track', 'CompleteRegistration');
+                }
+
                 window.location.href = 'obrigado.html';
-            }, 1000);
 
-        } catch (error) {
-            console.error('ERRO FATAL:', error);
-            formStatus.textContent = 'Erro ao processar cadastro. Tente novamente.';
-            formStatus.className = 'error';
-            submitButton.disabled = false;
-            submitButton.textContent = 'QUERO ME REGISTRAR';
-        }
+            } catch (error) {
+                console.error(error);
+                alert('Ocorreu um erro ao enviar o cadastro. Tente novamente.');
+                submitButton.disabled = false;
+                submitButton.textContent = 'QUERO ME REGISTRAR';
+            }
+        });
     }
+    
+    // ... (Mantenha o código da calculadora aqui embaixo se houver) ...
+});
 
     // --- LÓGICA DA CALCULADORA ---
     const valorInput = document.getElementById('valor-aplicado');
