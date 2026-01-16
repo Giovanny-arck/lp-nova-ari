@@ -1,38 +1,35 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 1. Configuração dos Webhooks
+    // --- CONFIGURAÇÃO (IGUAL LP DUBAI) ---
     const WEBHOOK_URL_1 = 'https://n8nwebhook.arck1pro.shop/webhook/lp-lead-direto';
     const WEBHOOK_URL_2 = 'https://n8nwebhook.arck1pro.shop/webhook/lp-lead-direto-rdmkt';
 
-    // 2. Inicialização do Telefone
+    // --- 1. INICIALIZAÇÃO DO TELEFONE ---
     const phoneInput = document.getElementById('telefone');
     let iti;
 
-    try {
-        if (window.intlTelInput && phoneInput) {
-            iti = window.intlTelInput(phoneInput, {
-                // IMPORTANTE: Este link deve terminar em .js
-                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-                initialCountry: "auto",
-                geoIpLookup: function(callback) {
-                    fetch("https://ipapi.co/json")
-                        .then(res => res.json())
-                        .then(data => callback(data.country_code))
-                        .catch(() => callback("br"));
-                },
-                preferredCountries: ['br', 'pt', 'us']
-            });
-            console.log("Telefone inicializado com sucesso!");
-        } else {
-            console.error("ERRO: Input '#telefone' não encontrado ou biblioteca intlTelInput não carregada.");
-        }
-    } catch (err) {
-        console.error("Erro fatal ao iniciar telefone:", err);
+    if (phoneInput && window.intlTelInput) {
+        iti = window.intlTelInput(phoneInput, {
+            // CORREÇÃO CRÍTICA: Aponta para o arquivo JS
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+            initialCountry: "auto",
+            geoIpLookup: function(callback) {
+                fetch("https://ipapi.co/json")
+                    .then(res => res.json())
+                    .then(data => callback(data.country_code))
+                    .catch(() => callback("br"));
+            },
+            preferredCountries: ['br', 'pt', 'us'],
+            separateDialCode: true // Opcional: Mostra o DDI separado (+55) visualmente
+        });
+    } else {
+        console.warn("Input #telefone não encontrado ou biblioteca não carregou.");
     }
 
-    // 3. Formulário
+    // --- 2. LÓGICA DO FORMULÁRIO ---
     const contactForm = document.getElementById('contact-form');
     
+    // Função UTMs
     function getUtmParams() {
         const params = new URLSearchParams(window.location.search);
         const utm = {};
@@ -47,38 +44,41 @@ document.addEventListener('DOMContentLoaded', () => {
     if (contactForm) {
         contactForm.addEventListener('submit', async (event) => {
             event.preventDefault();
+            
             const submitButton = contactForm.querySelector('button[type="submit"]');
             const formStatus = document.getElementById('form-status');
             
+            // Limpa mensagens anteriores
             if (formStatus) {
                 formStatus.textContent = '';
                 formStatus.className = '';
             }
-            
-            // Validação
+
+            // Validação do Telefone
             if (iti && !iti.isValidNumber()) {
-                const msg = 'Por favor, insira um número de telefone válido (ex: 47999998888).';
+                const msg = 'Por favor, insira um número de telefone válido.';
                 if (formStatus) {
                     formStatus.textContent = msg;
-                    formStatus.className = 'error';
+                    formStatus.className = 'form-status-error'; // Classe definida no CSS novo
                 } else {
                     alert(msg);
                 }
                 return;
             }
 
+            // Trava botão
             submitButton.disabled = true;
             submitButton.textContent = 'ENVIANDO...';
 
+            // Prepara dados
             const urlParams = new URLSearchParams(window.location.search);
             const rawFormData = new FormData(contactForm);
             
-            // Payload
             const payload = {
                 nome: rawFormData.get('nome'),
                 email: rawFormData.get('email'),
                 profissao: rawFormData.get('profissao'),
-                whatsapp: iti ? iti.getNumber() : rawFormData.get('whatsapp'),
+                whatsapp: iti ? iti.getNumber() : rawFormData.get('whatsapp'), // Pega número completo (+55...)
                 investe_atualmente: rawFormData.get('investe_atualmente'),
                 prazo_investimento: rawFormData.get('prazo_investimento'),
                 ciente_emprestimos: rawFormData.get('ciente_emprestimos'),
@@ -90,18 +90,19 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             try {
-                // Envio 1
+                // Envio 1 (Principal)
                 const response1 = await fetch(WEBHOOK_URL_1, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
 
+                // Tratamento de Duplicidade (409)
                 if (response1.status === 409) {
                     const msg = 'Você já tem um cadastro conosco.';
                     if (formStatus) {
                         formStatus.textContent = msg;
-                        formStatus.className = 'error';
+                        formStatus.className = 'form-status-error';
                     } else {
                         alert(msg);
                     }
@@ -110,21 +111,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                if (!response1.ok) throw new Error(`Status: ${response1.status}`);
+                if (!response1.ok) throw new Error(`Erro API: ${response1.status}`);
 
-                // Envio 2 (RD)
+                // Envio 2 (RD Station / Backup)
                 try {
                     await fetch(WEBHOOK_URL_2, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
-                } catch (e) { console.warn('Ignorando erro secundário'); }
+                } catch (e) { console.warn('Erro secundário ignorado'); }
 
                 // Sucesso
                 if (formStatus) {
                     formStatus.textContent = 'Sucesso! Redirecionando...';
-                    formStatus.className = 'success';
+                    formStatus.className = 'form-status-success';
                 }
                 
                 if (typeof fbq === 'function') fbq('track', 'CompleteRegistration');
@@ -138,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const msg = 'Erro ao enviar. Tente novamente.';
                 if (formStatus) {
                     formStatus.textContent = msg;
-                    formStatus.className = 'error';
+                    formStatus.className = 'form-status-error';
                 } else {
                     alert(msg);
                 }
@@ -147,8 +148,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    // (Código da calculadora deve ficar abaixo se houver)
 });
 
     // --- LÓGICA DA CALCULADORA ---
